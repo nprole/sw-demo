@@ -1,0 +1,44 @@
+.container {
+  width: 100%;
+  height: 100%;
+}
+
+.text-mesh {
+  width: 100%; /* Or any other size */
+  height: 100%; /* Or any other size */
+  transition: transform 0.3s; /* For smooth transformations */
+}
+:root {
+  --x: 100px;
+  --y: 50px;
+  --z: 0;
+}
+
+
+/* Define dynamic transformations */
+.transform-translate {
+  transform: translate3d(var(--x), var(--y), var(--z));
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.capability {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+.capability h3 {
+  margin-bottom: 10px;
+  color: #333;
+}
+.capability ul {
+  padding-left: 20px;
+  list-style-type: disc;
+}
+.capability ul li {
+  margin-bottom: 5px;
+}
