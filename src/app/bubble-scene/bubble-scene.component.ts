@@ -73,7 +73,7 @@ export class BubbleSceneComponent implements OnInit {
   // Add helpers for development
   private addHelpers(): void {
     const size = this.size;
-    const divisions = 20;
+    const divisions = 10;
     const gridHelper = new THREE.GridHelper(size * 2, divisions);
     this.scene.add(gridHelper);
 

@@ -1,56 +1,169 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 import * as THREE from 'three';
+import {FontLoader} from "three/examples/jsm/loaders/FontLoader";
+import {TextGeometry} from "three/examples/jsm/geometries/TextGeometry";
+
+class Ball {
+  mesh!: THREE.Mesh;
+  velocity!: THREE.Vector3;
+  mass!: number;
+  radius!: number;
+}
 
 @Component({
   selector: 'app-office-scene',
   standalone: true,
-  imports: [],
   templateUrl: './office-scene.component.html',
-  styleUrl: './office-scene.component.css'
+  styleUrls: ['./office-scene.component.css']
 })
-export class OfficeSceneComponent {
+export class OfficeSceneComponent implements OnInit {
   private scene!: THREE.Scene;
   private camera!: THREE.PerspectiveCamera;
   private renderer!: THREE.WebGLRenderer;
-  private cube!: THREE.Mesh;
+  private ball!: THREE.Mesh;
+  private moveDirection = new THREE.Vector3();
+  private clock = new THREE.Clock();
+  private playerBall!: Ball;
+  private keys: { [key: string]: boolean } = {};
+  private readonly size = 50; // Adjust size if needed
+
+  constructor(private elRef: ElementRef) {}
 
   ngOnInit(): void {
     this.initThreeJS();
     this.animate();
   }
 
+  ngAfterViewInit(): void {
+    this.createGradientFloor();
+    this.addTextToFloor();
+  }
+
   private initThreeJS(): void {
-    // Scene
+    // Set up the scene
     this.scene = new THREE.Scene();
 
-    // Camera
+    // Set up the camera
     this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    this.camera.position.z = 5;
+    this.camera.position.set(0, 10, 20);
 
-    // Renderer
+    // Set up the renderer
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(this.renderer.domElement);
+    this.elRef.nativeElement.querySelector('#gameContainer').appendChild(this.renderer.domElement);
 
-    // Geometry
-    const geometry = new THREE.BoxGeometry();
-    const texture = new THREE.TextureLoader().load('assets/images/texture1.png');
-    const material = new THREE.MeshBasicMaterial({ map: texture });
-    this.cube = new THREE.Mesh(geometry, material);
-    this.scene.add(this.cube);
+    // Create the player (ball)
+    const ballGeometry = new THREE.SphereGeometry(1, 32, 32);
+    const ballMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+    this.ball = new THREE.Mesh(ballGeometry, ballMaterial);
+    this.ball.position.y = 1; // Raise the ball above the floor
+    const radius = 1; // Ball radius should match geometry
+
+    this.playerBall = {
+      mesh: this.ball,
+      velocity: new THREE.Vector3(0, 0, 0),
+      mass: 1,
+      radius
+    };
+    this.scene.add(this.ball);
+
+    // Add ambient light to the scene
+    const ambientLight = new THREE.AmbientLight(0x404040);
+    this.scene.add(ambientLight);
+  }
+
+  private createGradientFloor(): void {
+    // Create a canvas to draw the gradient
+    const canvas = document.createElement('canvas');
+    canvas.width = 1024;
+    canvas.height = 1024;
+    const context = canvas.getContext('2d');
+
+    if (context) {
+      const gradient = context.createLinearGradient(0, 0, canvas.width, 0);
+      gradient.addColorStop(0, 'rgba(2,0,36,1)');
+      gradient.addColorStop(0.14, 'rgba(245,177,87,1)');
+      gradient.addColorStop(1, 'rgba(205,242,250,1)');
+      // Fill with gradient
+      context.fillStyle = gradient;
+      context.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Create texture and apply to the floor
+      const texture = new THREE.CanvasTexture(canvas);
+      const floorGeometry = new THREE.PlaneGeometry(this.size * 2, this.size * 2);
+      const floorMaterial = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
+      const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+      floor.rotation.x = Math.PI / 2;
+      this.scene.add(floor);
+    }
+  }
+
+  private addTextToFloor(): void {
+    const loader = new FontLoader();
+    loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', (font) => {
+      const textGeometry = new TextGeometry('Welcome', {
+        font: font,
+        size: 5,
+        height: 1,
+        curveSegments: 12,
+        bevelEnabled: false
+      });
+      const textMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+      const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+      textMesh.rotation.x = -Math.PI / 2;
+      textMesh.position.set(-15, 0.1, -15); // Adjust position as needed
+      this.scene.add(textMesh);
+    });
   }
 
   private animate(): void {
     requestAnimationFrame(() => this.animate());
-    this.cube.rotation.x += 0.01;
-    this.cube.rotation.y += 0.01;
+
+    // Calculate delta time for consistent movement
+    const delta = this.clock.getDelta();
+    this.movePlayerBall(delta);
+
+    // Update camera position to follow the ball
+    this.camera.position.set(this.ball.position.x, this.ball.position.y + 10, this.ball.position.z + 20);
+    this.camera.lookAt(this.ball.position);
+
     this.renderer.render(this.scene, this.camera);
   }
 
-  @HostListener('window:resize', ['$event'])
-  onWindowResize(event: Event): void {
-    this.camera.aspect = window.innerWidth / window.innerHeight;
-    this.camera.updateProjectionMatrix();
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
+  private movePlayerBall(delta: number): void {
+    const speed = 10;
+    const maxDistance = this.size - this.playerBall.radius;
+    const velocity = this.playerBall.velocity;
+
+    if (this.keys['w']) velocity.z -= speed * delta;
+    if (this.keys['s']) velocity.z += speed * delta;
+    if (this.keys['a']) velocity.x -= speed * delta;
+    if (this.keys['d']) velocity.x += speed * delta;
+
+    const newPosition = this.playerBall.mesh.position.clone().add(velocity);
+
+    // Check for collisions with map boundaries and bounce
+    if (newPosition.x - this.playerBall.radius < -this.size || newPosition.x + this.playerBall.radius > this.size) {
+      velocity.x = -velocity.x; // Reverse direction
+    }
+    if (newPosition.z - this.playerBall.radius < -this.size || newPosition.z + this.playerBall.radius > this.size) {
+      velocity.z = -velocity.z; // Reverse direction
+    }
+
+    // Apply the new position
+    this.playerBall.mesh.position.add(velocity);
+
+    // Apply friction to velocity
+    this.playerBall.velocity.multiplyScalar(0.95);
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  onKeyDown(event: KeyboardEvent): void {
+    this.keys[event.key.toLowerCase()] = true;
+  }
+
+  @HostListener('window:keyup', ['$event'])
+  onKeyUp(event: KeyboardEvent): void {
+    this.keys[event.key.toLowerCase()] = false;
   }
 }

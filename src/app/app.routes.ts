@@ -6,6 +6,7 @@ import { SceneOverviewComponent } from './scene-overview/scene-overview.componen
 import {AboutComponent} from "./about/about.component";
 import {ChatGptShowcaseComponent} from "./chat-gpt-showcase/chat-gpt-showcase.component";
 import {BubbleSceneComponent} from "./bubble-scene/bubble-scene.component";
+import {OfficeSceneComponent} from "./office-scene/office-scene.component";
 
 // PRO TIP
 export const routes: Routes = [
@@ -15,6 +16,7 @@ export const routes: Routes = [
   { path: 'scenes/tetris-scene', component: TetrisSceneComponent },
   { path: 'scenes/cube-example', component: ThreeSceneComponent },
   { path: 'scenes/bubble-scene', component: BubbleSceneComponent },
+  { path: 'scenes/office', component: OfficeSceneComponent },
   { path: 'chatgpt-4', component: ChatGptShowcaseComponent }, // Assuming AboutComponent represents ChatGPT 4o for now
 
 ];
