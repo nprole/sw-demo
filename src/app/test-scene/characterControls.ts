@@ -1,6 +1,7 @@
-import { AnimationAction, AnimationMixer, Camera, Group, Quaternion, Vector3 } from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { A, D, DIRECTIONS, S, W } from './utils.service';
+import {AnimationAction, AnimationMixer, Camera, Group, LoadingManager, Quaternion, Scene, Vector3} from 'three';
+import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
+import {A, D, DIRECTIONS, S, W} from './utils.service';
+import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader.js";
 
 export class CharacterControls {
   model: Group;
@@ -21,8 +22,8 @@ export class CharacterControls {
 
   // constants
   fadeDuration: number = 0.2;
-  runVelocity = 5;
-  walkVelocity = 2;
+  runVelocity = 10;
+  walkVelocity = 5;
 
   constructor(model: Group, mixer: AnimationMixer, animationsMap: Map<string, AnimationAction>, orbitControl: OrbitControls, camera: Camera, currentAction: string) {
     this.model = model;
@@ -48,7 +49,7 @@ export class CharacterControls {
 
     let play = '';
     if (directionPressed && this.toggleRun) {
-      play = 'Run';
+      play = 'Walk';
     } else if (directionPressed) {
       play = 'Walk';
     } else {

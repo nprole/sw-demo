@@ -1,1 +1,15 @@
-<p>generated-sprites works!</p>
+<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <div *ngFor="let sprite of sprites; let i = index" class="carousel-item" [class.active]="i === currentSlide">
+      <img [src]="sprite" class="d-block w-100" alt="Sprite Image">
+    </div>
+  </div>
+  <div class="carousel-control-prev" href="#carouselExampleControls" role="button" (click)="previous();">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </div>
+  <div class="carousel-control-next" href="#carouselExampleControls" role="button" (click)="next();">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </div>
+</div>

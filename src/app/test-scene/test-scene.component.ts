@@ -3,7 +3,9 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { CharacterControls } from './characterControls';  // Adjust the path as necessary
-import { UtilsService } from './utils.service';  // Adjust the path as necessary
+import { UtilsService } from './utils.service';
+import { BoxHelper, LoadingManager, Scene } from "three";
+import { World, Body, Box, Vec3 } from 'cannon-es';
 
 @Component({
   selector: 'app-test-scene',
@@ -19,9 +21,20 @@ export class TestSceneComponent implements OnInit, AfterViewInit {
   private characterControls!: CharacterControls;
   private clock!: THREE.Clock;
   private keysPressed!: any;
+
+  loadingManger: LoadingManager = new LoadingManager();
+  private models = ['assets/models/rock-001.glb', 'assets/models/tree-002.glb', 'assets/models/trunk-001.glb', 'assets/models/trunk-002.glb'];
+
+  private loader = new GLTFLoader(this.loadingManger);
+
+  // Create the Cannon.js world
+  private world!: World;
+
   constructor(private elRef: ElementRef, private utilsService: UtilsService) {}
 
   ngOnInit(): void {
+    this.world = new World();
+    this.world.gravity.set(0, -9.82, 0); // Set gravity
     this.keysPressed = {};
     this.initScene();
   }
@@ -64,9 +77,14 @@ export class TestSceneComponent implements OnInit, AfterViewInit {
     // MODEL WITH ANIMATIONS
     const loadingManager = new THREE.LoadingManager();
     const gltfLoader = new GLTFLoader(loadingManager);
+    //assets/models/dino.glb
     gltfLoader.load('assets/models/forest-monster-final.glb', (gltf) => {
       const model = gltf.scene;
+
+      const boxHelper = new BoxHelper(model);
+      model.add(boxHelper);
       model.scale.set(0.1, 0.1, 0.1);
+      // Add BoxHelper for the model
 
       model.traverse((object) => {
         if ((object as THREE.Mesh).isMesh) (object as THREE.Mesh).castShadow = true;
@@ -82,12 +100,48 @@ export class TestSceneComponent implements OnInit, AfterViewInit {
       this.characterControls = new CharacterControls(model, mixer, animationsMap, this.orbitControls, this.camera, 'Idle');
     });
 
+    for (let i = 0; i < 30; i++) {
+      const modelIndex = Math.floor(Math.random() * this.models.length);
+      const modelPath = this.models[modelIndex];
+
+      this.loader.load(modelPath, (gltf) => {
+        const object = gltf.scene;
+        object.position.set(Math.random() * 100 - 50, 0, Math.random() * 100 - 50); // Set initial position flat on the ground
+        this.scene.add(object);
+
+        // Create and add physics body
+        const body = this.createPhysicsBody(object);
+        this.world.addBody(body);
+
+        object.userData['physicsBody'] = body;
+      }, () => {}, (error) => {
+        console.error('An error happened', error);
+      });
+    }
+
     // CONTROL KEYS
     document.addEventListener('keydown', (event) => this.onKeyDown(event), false);
     document.addEventListener('keyup', (event) => this.onKeyUp(event), false);
 
     // CLOCK
     this.clock = new THREE.Clock();
+  }
+
+  private createPhysicsBody(object: THREE.Object3D): Body {
+    // Get the bounding box of the object
+    const box = new THREE.Box3().setFromObject(object);
+    const size = new THREE.Vector3();
+    box.getSize(size);
+
+    // Create a Cannon.js body
+    const shape = new Box(new Vec3(size.x / 2, size.y / 2, size.z / 2));
+    const body = new Body({
+      mass: 1, // Set mass
+      position: new Vec3(object.position.x, object.position.y, object.position.z)
+    });
+    body.addShape(shape);
+
+    return body;
   }
 
   private addLights(): void {
@@ -133,6 +187,13 @@ export class TestSceneComponent implements OnInit, AfterViewInit {
     floor.receiveShadow = true;
     floor.rotation.x = -Math.PI / 2;
     this.scene.add(floor);
+
+    // Add ground to physics world
+    const groundShape = new Box(new Vec3(40, 1, 40)); // Adjust size to match the Three.js ground plane
+    const groundBody = new Body({ mass: 0 });
+    groundBody.addShape(groundShape);
+    groundBody.position.set(0, -1, 0); // Ensure it matches the position of the Three.js ground plane
+    this.world.addBody(groundBody);
   }
 
   private wrapAndRepeatTexture(map: THREE.Texture): void {
@@ -164,6 +225,20 @@ export class TestSceneComponent implements OnInit, AfterViewInit {
 
   private animate(): void {
     requestAnimationFrame(() => this.animate());
+
+    // Step the physics world
+    this.world.step(1 / 60);
+
+// Update the position of the Three.js objects to match the physics bodies
+    this.scene.children.forEach((object) => {
+      if (object.userData['physicsBody']) {
+        const body = object.userData['physicsBody'];
+        object.position.copy(body.position);
+        object.quaternion.copy(body.quaternion);
+      }
+    });
+
+
     const mixerUpdateDelta = this.clock.getDelta();
     if (this.characterControls) {
       this.characterControls.update(mixerUpdateDelta, this.keysPressed);

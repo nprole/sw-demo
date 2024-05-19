@@ -4,14 +4,51 @@ h1, h2 {
 
 .list-group-item {
   font-size: 1.2rem;
-  padding: 1rem;
+  padding: 1rem 1rem 1rem 3rem;
   background-color: #f8f9fa;
   margin-bottom: 0.5rem;
   border-radius: 0.25rem;
   transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  position: relative;
 }
 
 .list-group-item:hover {
   background-color: #e2e6ea;
   text-decoration: none;
 }
+
+.list-group-item small {
+  display: block;
+  margin-top: 0.5rem;
+  color: #6c757d;
+}
+
+.icon {
+  width: 120px; /* Adjust based on actual icon size */
+  height: 120px; /* Adjust based on actual icon size */
+  background-image: url('../../assets/icons/img_1.png'); /* Path to your sprite sheet */
+  background-repeat: no-repeat;
+  background-size: 499px 493px; /* Adjust based on sprite sheet size */
+}
+
+/*
+ OVO CHAT GPT NIJE USPIO NAMJESTITI
+*/
+.spline { background-position: 0px 0px; }
+.blender { background-position: -128px 0px; }
+.tiled { background-position: -249px 0px; }
+.phaser { background-position: -374px 0px; }
+.mixamo { background-position: 0px -128px; }
+.webgpu { background-position: -128px -128px; }
+.webgl { background-position: -256px -128px; }
+.cannon { background-position: -384px -128px; }
+.angular { background-position: 0px -256px; }
+.angular-v17 { background-position: -128px -256px; }
+.threejs { background-position: -247px -249px; }
+.character-model { background-position: -384px -256px; }
+.awarded-apps { background-position: 0px -384px; }
+.slot-machine { background-position: -128px -384px; }
+.chatgpt { background-position: -256px -384px; }
+.blokadelabs { background-position: -384px -384px; }

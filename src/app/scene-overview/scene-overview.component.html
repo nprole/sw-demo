@@ -1,22 +1,19 @@
-<div class="container">
-  <h1>Scenes Overview</h1>
-  <div class="button-container">
-    <button (click)="navigateTo('/home')">Home</button>
-    <button (click)="navigateTo('/about')">About</button>
-    <button (click)="navigateTo('/scenes/tetris-scene')">Tetris Scene</button>
-    <button (click)="navigateTo('/scenes/cube-example')">Cube Example</button>
-    <button (click)="navigateTo('/scenes/office')">Office Scene</button>
-    <button (click)="navigateTo('/scenes/bubble-scene')">Bubble</button>
-    <button (click)="navigateTo('/scenes/test-3d')">3D Model Animated</button>
-    <button (click)="navigateTo('/chatgpt-4')">ChatGPT 4o</button>
+<div class="card">
+  <h1 class="card-header">Scenes Overview</h1>
+  <div class="button-container d-flex">
+    <div *ngFor="let example of examples">
+      <button (click)="navigateTo(example.route)" >{{example.name}}</button>
+    </div>
   </div>
-  <div class="description">
-
-    <p><strong>Home:</strong> The main page of the application.</p>
-    <p><strong>About:</strong> Information about the application and its purpose.</p>
-    <p><strong>Tetris Scene:</strong> This example showcases a Tetris game implemented with Angular and Three.js.</p>
-    <p><strong>Cube Sceme:</strong> This example demonstrates a simple 3D rotating cube using Three.js.</p>
-    <p><strong>Office Scene</strong> Office scene built from image uploaded, recordred with camera</p>
-    <p><strong>ChatGPT 4o:</strong> Information about the ChatGPT 4o model and its features.</p>
+  <div class="card-body">
+    <div class="description">
+      <p><strong>Home:</strong> The main page of the application.</p>
+      <p><strong>About:</strong> Information about the application and its purpose.</p>
+      <p><strong>Tetris Scene:</strong> This example showcases a Tetris game implemented with Angular and Three.js.</p>
+      <p><strong>Cube Sceme:</strong> This example demonstrates a simple 3D rotating cube using Three.js.</p>
+      <p><strong>Office Scene</strong> Office scene built from image uploaded, recordred with camera</p>
+      <p><strong>ChatGPT 4o:</strong> Information about the ChatGPT 4o model and its features.</p>
+      <p><strong>ChatGPT 4o:</strong> Information about the ChatGPT 4o model and its features.</p>
+    </div>
   </div>
 </div>

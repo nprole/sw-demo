@@ -3,8 +3,12 @@
   <div *ngFor="let linkCategory of links" class="mb-5">
     <h2 class="text-center">{{ linkCategory.category }}</h2>
     <div class="list-group">
-      <a *ngFor="let link of linkCategory.items" [href]="link.url" target="_blank" class="list-group-item list-group-item-action text-center">
-        {{ link.name }}
+      <a *ngFor="let link of linkCategory.items" [href]="link.url" target="_blank" class="list-group-item list-group-item-action text-center d-flex align-items-center">
+        <div class="icon me-3" [ngClass]="link.className"></div>
+        <div class="flex-grow-1">
+          {{ link.name }}
+          <small class="d-block text-muted">{{ link.description }}</small>
+        </div>
       </a>
     </div>
   </div>

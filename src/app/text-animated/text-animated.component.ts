@@ -9,4 +9,8 @@ import { Component } from '@angular/core';
 })
 export class TextAnimatedComponent {
 
+  constructor() { }
+
+  ngOnInit(): void {
+  }
 }

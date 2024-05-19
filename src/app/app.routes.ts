@@ -9,11 +9,15 @@ import {BubbleSceneComponent} from "./bubble-scene/bubble-scene.component";
 import {OfficeSceneComponent} from "./office-scene/office-scene.component";
 import {TextAnimatedComponent} from "./text-animated/text-animated.component";
 import {TestSceneComponent} from "./test-scene/test-scene.component";
+import {LinksComponent} from "./links/links.component";
+import {GeneratedSpritesComponent} from "./generated-sprites/generated-sprites.component";
 
 // PRO TIP
 export const routes: Routes = [
   { path: '', redirectTo: '/scenes', pathMatch: 'full' },
   { path: 'about', component: AboutComponent },
+  { path: 'links', component: LinksComponent},
+  { path: 'sprites', component: GeneratedSpritesComponent},
   { path: 'scenes', component: SceneOverviewComponent },
   { path: 'scenes/tetris-scene', component: TetrisSceneComponent },
   { path: 'scenes/cube-example', component: ThreeSceneComponent },
