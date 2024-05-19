@@ -18,11 +18,15 @@ import {
   WebGLRenderer
 } from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
-import {FontLoader} from "three/examples/jsm/loaders/FontLoader.js";
-import {TextGeometry} from "three/examples/jsm/geometries/TextGeometry.js";
 import {ParametricGeometries} from "three/examples/jsm/geometries/ParametricGeometries";
 import SphereGeometry = ParametricGeometries.SphereGeometry;
-import {TextGeometryParameters} from "three/examples/jsm/geometries/TextGeometry";
+/*
+import {FontLoader} from "three/examples/jsm/loaders/FontLoader.js";
+import {TextGeometry} from "three/examples/jsm/geometries/TextGeometry.js";
+import {ParametricGeometries} from "three/examples/jsm/geometries/ParametricGeometries.js";
+import SphereGeometry = ParametricGeometries.SphereGeometry;
+import {TextGeometryParameters} from "three/examples/jsm/geometries/TextGeometry.js";
+*/
 
 class Ball {
   mesh!: Mesh;
@@ -178,7 +182,7 @@ export class BubbleSceneComponent implements OnInit {
   }
 
   private addPlayerLabel(): void {
-    const loader = new FontLoader();
+/*    const loader = new FontLoader();
     loader.load('assets/fonts/helvetiker_regular.typeface.json', (font) => {
       const textGeometry = new TextGeometry('Player', {
         font: font,
@@ -190,7 +194,7 @@ export class BubbleSceneComponent implements OnInit {
       this.playerLabel = new Mesh(textGeometry, textMaterial);
       this.playerLabel.position.set(0, -10, 0);
       this.scene.add(this.playerLabel);
-    });
+    });*/
   }
 
   @HostListener('window:keydown', ['$event'])

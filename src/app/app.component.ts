@@ -20,4 +20,8 @@ export class AppComponent {
     //this.location.back();
     this.router.navigate(['..'], {});
   }
+
+  navigateTo(){
+    this.router.navigate(['/scenes'], {});
+  }
 }

@@ -83,10 +83,10 @@ export class GeneratedSpritesComponent implements OnInit, OnDestroy {
         this.currentSlide = 0;
       }
     } else {
-      if (this.currentSlide < this.sprites.length - 1) {
-        this.currentSlide++;
+      if (this.currentLogoSlide < this.logos.length - 1) {
+        this.currentLogoSlide++;
       } else {
-        this.currentSlide = 0;
+        this.currentLogoSlide = 0;
       }
     }
 

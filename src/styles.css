@@ -2,3 +2,97 @@
 html body app-root {
   height: 100%;
 }
+
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  font-family: 'Arial', sans-serif;
+  background-color: #f5f5dc; /* Light beige background */
+  color: #333; /* Dark text color */
+}
+
+footer {
+  height: 3vh;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+/* Header */
+header {
+  background: black; /* Dark sea green */
+  color: white;
+  padding: 20px;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* Main Content */
+main {
+  height: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #e0eee0; /* Light green background */
+  padding: 20px;
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.card main {
+  height: 100%;
+}
+
+
+h1 h2 h3 {
+  text-align: center;
+  font-family: 'Arial', sans-serif;
+
+}
+
+.logo {
+  width: 60px; /* Adjust based on actual icon size */
+  height: 60px; /* Adjust based on actual icon size */
+  background-image: url('./assets/logo.png'); /* Path to your sprite sheet */
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+/* Buttons */
+.button {
+  background: #4682b4; /* Steel blue */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.button:hover {
+  background: #4169e1; /* Royal blue */
+}
+
+/* Footer */
+footer {
+  background: #2e8b57; /* Dark sea green */
+  color: white;
+  text-align: center;
+  padding: 10px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}

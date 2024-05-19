@@ -2,18 +2,14 @@
   <h1 class="card-header">Scenes Overview</h1>
   <div class="button-container d-flex">
     <div *ngFor="let example of examples">
-      <button (click)="navigateTo(example.route)" >{{example.name}}</button>
+      <button class='btn btn-secondary' (click)="navigateTo(example.route)">{{example.name}}</button>
     </div>
   </div>
   <div class="card-body">
     <div class="description">
-      <p><strong>Home:</strong> The main page of the application.</p>
-      <p><strong>About:</strong> Information about the application and its purpose.</p>
-      <p><strong>Tetris Scene:</strong> This example showcases a Tetris game implemented with Angular and Three.js.</p>
-      <p><strong>Cube Sceme:</strong> This example demonstrates a simple 3D rotating cube using Three.js.</p>
-      <p><strong>Office Scene</strong> Office scene built from image uploaded, recordred with camera</p>
-      <p><strong>ChatGPT 4o:</strong> Information about the ChatGPT 4o model and its features.</p>
-      <p><strong>ChatGPT 4o:</strong> Information about the ChatGPT 4o model and its features.</p>
+      <div *ngFor="let example of examples">
+        <div (click)="navigateTo(example.route)">{{example.description}}</div>
+      </div>
     </div>
   </div>
 </div>

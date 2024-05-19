@@ -7,7 +7,6 @@ import {AboutComponent} from "./about/about.component";
 import {ChatGptShowcaseComponent} from "./chat-gpt-showcase/chat-gpt-showcase.component";
 import {BubbleSceneComponent} from "./bubble-scene/bubble-scene.component";
 import {OfficeSceneComponent} from "./office-scene/office-scene.component";
-import {TextAnimatedComponent} from "./text-animated/text-animated.component";
 import {TestSceneComponent} from "./test-scene/test-scene.component";
 import {LinksComponent} from "./links/links.component";
 import {GeneratedSpritesComponent} from "./generated-sprites/generated-sprites.component";
@@ -23,7 +22,6 @@ export const routes: Routes = [
   { path: 'scenes/cube-example', component: ThreeSceneComponent },
   { path: 'scenes/bubble-scene', component: BubbleSceneComponent },
   { path: 'scenes/office', component: OfficeSceneComponent },
-  { path: 'scenes/text-animated', component: TextAnimatedComponent },
   { path: 'scenes/test-3d', component: TestSceneComponent},
   { path: 'chatgpt-4', component: ChatGptShowcaseComponent }, // Assuming AboutComponent represents ChatGPT 4o for now
 ];

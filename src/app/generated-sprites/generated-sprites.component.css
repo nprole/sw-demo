@@ -1,10 +1,10 @@
 #carouselExampleControls {
-  width: 300px;
-  height: 300px;
-  padding: 10px
+  max-width: 500px;
+  max-height: 500px;
+  padding: 50px
 }
 #carouselLogoExampleControls {
-  width: 300px;
-  height: 300px;
-  padding: 10px
+  max-width: 500px;
+  max-height: 500px;
+  padding: 50px
 }
