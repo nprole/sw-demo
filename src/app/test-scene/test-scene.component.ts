@@ -96,7 +96,7 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
   ngAfterViewInit(): void {
     this.initUI();
     this.initScene();
-   // this.addFog();
+    this.addFog();
     this.animate();
   }
 
@@ -286,7 +286,7 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
   private addFog() {
-/*    // Add fog to the scene
+    // Add fog to the scene
     this.scene.fog = new Fog(0xaaaaaa, 10, 200); // Color, near, far
 
     // Load fog texture
@@ -312,7 +312,7 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
     fogPlane.position.y = 0.1; // Slightly above the ground to avoid z-fighting
 
     // Add the fog plane to the scene
-    this.scene.add(fogPlane);*/
+    this.scene.add(fogPlane);
   }
 
   private createPhysicsBody(object: Object3D): Body {
