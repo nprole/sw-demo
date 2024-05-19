@@ -7,9 +7,9 @@ import {
   BoxHelper,
   Clock,
   Color, CubeTextureLoader,
-  DirectionalLight, EquirectangularReflectionMapping,
+  DirectionalLight, EquirectangularReflectionMapping, Fog,
   LoadingManager, Material,
-  Mesh,
+  Mesh, MeshBasicMaterial,
   MeshStandardMaterial,
   Object3D,
   PerspectiveCamera,
@@ -28,6 +28,7 @@ import {UtilsService} from './utils.service';
 import {Body, Box, Vec3, World} from 'cannon-es';
 import {RGBELoader} from "three/examples/jsm/loaders/RGBELoader";
 import {GUI} from 'dat.gui';
+import {FBXLoader} from "three/examples/jsm/loaders/FBXLoader";
 
 @Component({
   selector: 'app-test-scene',
@@ -53,6 +54,28 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
     'assets/models/trunk-001.glb',
     'assets/models/trunk-002.glb',
     'assets/models/low-poly-tree.glb'];
+  private modelsFbx = [
+    'assets/models/trees/Fbx/Tree_Tropic_001.fbx',
+    'assets/models/trees/Fbx/Tree_Tropic_002.fbx',
+    'assets/models/trees/Fbx/Tree_Tropic_003.fbx',
+    'assets/models/trees/Fbx/Tree_Tropic_004.fbx',
+    'assets/models/trees/Fbx/Tree_Tropic_005.fbx',
+    'assets/models/trees/Fbx/Tree_Tropic_006.fbx',
+    'assets/models/trees/Fbx/Tree_Tropic_007.fbx',
+    'assets/models/trees/Fbx/Tree_Tropic_008.fbx',
+    'assets/models/trees/Fbx/Tree_Tropic_009.fbx',
+    'assets/models/trees/Fbx/Tree_Tropic_010.fbx',
+    'assets/models/trees/Fbx/Tree_Tropic_011.fbx',
+    'assets/models/trees/Fbx/Tree_Tropic_012.fbx',
+    'assets/models/trees/Fbx/Tree_Tropic_013.fbx',
+    'assets/models/trees/Fbx/Tree_Tropic_014.fbx',
+    'assets/models/trees/Fbx/Tree_Tropic_015.fbx',
+    'assets/models/trees/Fbx/Tree_Tropic_016.fbx',
+    'assets/models/trees/Fbx/Tree_Tropic_017.fbx',
+    'assets/models/trees/Fbx/Tree_Tropic_018.fbx',
+    'assets/models/trees/Fbx/Tree_Tropic_019.fbx',
+    'assets/models/trees/Fbx/Tree_Tropic_020.fbx'
+  ];
 
   private loader = new GLTFLoader(this.loadingManger);
 
@@ -67,11 +90,13 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
     this.world = new World();
     this.world.gravity.set(0, -9.82, 0); // Set gravity
     this.keysPressed = {};
-    this.initUI();
-    this.initScene();
+
   }
 
   ngAfterViewInit(): void {
+    this.initUI();
+    this.initScene();
+   // this.addFog();
     this.animate();
   }
 
@@ -129,8 +154,8 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
     this.scene.background = new Color(0xa8def0);
 
     // CAMERA
-    this.camera = new PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 2000);
-    this.camera.position.set(0, 5, 5);
+    this.camera = new PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 3000);
+    this.camera.position.set(0, 10, 10);
 
     // RENDERER
     this.renderer = new WebGLRenderer({antialias: true});
@@ -158,6 +183,8 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
     // Load model
     const loadingManager = new LoadingManager();
     const gltfLoader = new GLTFLoader(loadingManager);
+    // Create an FBXLoader
+
     gltfLoader.load('assets/models/forest-monster-final.glb', (gltf): void => {
       const model = gltf.scene;
 
@@ -208,8 +235,37 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
     this.clock = new Clock();
   }
 
-  private generateForest(){
-    for (let i = 0; i < 500; i++) {
+  private generateForest() {
+    const loader = new FBXLoader();
+    for (let i = 0; i < 100; i++) {
+      const modelIndex = Math.floor(Math.random() * this.modelsFbx.length);
+      const modelPath = this.modelsFbx[modelIndex];
+      loader.load(modelPath, (fbx)  => {
+          const object = fbx;
+          object.position.set(Math.random() * 500 - 250, 0, Math.random() * 500 - 250); // Set initial position flat on the ground
+
+          // Access and manipulate model properties
+          object.scale.set(0.02, 0.02, 0.02); // Scale the model down
+          object.rotation.y = Math.PI / 4; // Rotate the model
+          this.scene.add(object);
+
+        // Traverse the object to ensure materials are correctly applied
+      /*  object.traverse((child: Object3D) => {
+          if (child['isMesh']) {
+            child['material'].needsUpdate = true;
+            if (child['material'].map) child['material'].map.needsUpdate = true;
+          }
+        });
+*/
+          // Create and add physics body
+          const body = this.createPhysicsBody(object);
+          this.world.addBody(body);
+          object.userData['physicsBody'] = body;
+        }
+      );
+    }
+
+    for (let i = 0; i < 100; i++) {
       const modelIndex = Math.floor(Math.random() * this.models.length);
       const modelPath = this.models[modelIndex];
 
@@ -228,6 +284,35 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
         console.error('An error happened', error);
       });
     }
+  }
+  private addFog() {
+/*    // Add fog to the scene
+    this.scene.fog = new Fog(0xaaaaaa, 10, 200); // Color, near, far
+
+    // Load fog texture
+    const loader = new TextureLoader();
+    const fogTexture = loader.load('path/to/fog_texture.png'); // Ensure this path points to a valid texture file
+
+    // Create a plane geometry for the fog
+    const fogGeometry = new PlaneGeometry(1000, 1000); // Adjust size as needed
+
+    // Create a material for the fog plane with transparency
+    const fogMaterial = new MeshBasicMaterial({
+      map: fogTexture,
+      transparent: true,
+      opacity: 0.5, // Adjust the opacity for desired fog density
+      depthWrite: false // Ensure the fog doesn't obscure other objects
+    });
+
+    // Create the fog plane mesh
+    const fogPlane = new Mesh(fogGeometry, fogMaterial);
+
+    // Position the fog plane just above the floor
+    fogPlane.rotation.x = -Math.PI / 2; // Rotate to lay flat
+    fogPlane.position.y = 0.1; // Slightly above the ground to avoid z-fighting
+
+    // Add the fog plane to the scene
+    this.scene.add(fogPlane);*/
   }
 
   private createPhysicsBody(object: Object3D): Body {
@@ -380,18 +465,20 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
     this.world.step(1 / 60);
 
 // Update the position of the Three.js objects to match the physics bodies
+/*
     this.scene.children.forEach((object) => {
       //   console.log('Log' , object);
-      /*     if (this.checkCollision(mainModel, otherModels)) {
+      /!*     if (this.checkCollision(mainModel, otherModels)) {
              // Reverse movement or stop the main model from moving through other models
              undoMoveMainModel();
-           }*/
-      /*if (object.userData['physicsBody']) {
+           }*!/
+      /!*if (object.userData['physicsBody']) {
         const body = object.userData['physicsBody'];
         object.position.set(body.position.x, body.position.y, body.position.z);
         object.quaternion.set(body.quaternion.x, body.quaternion.y, body.quaternion.z, body.quaternion.w);
-      }*/
+      }*!/
     });
+*/
 
 
     const mixerUpdateDelta = this.clock.getDelta();
