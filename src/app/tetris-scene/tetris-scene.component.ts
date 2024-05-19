@@ -1,5 +1,15 @@
-import { Component, OnInit, ElementRef, ViewChild, HostListener } from '@angular/core';
-import * as THREE from 'three';
+import {Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
+import {
+  BoxGeometry,
+  Color,
+  Group,
+  Mesh,
+  MeshBasicMaterial,
+  OrthographicCamera,
+  Scene,
+  Vector3,
+  WebGLRenderer
+} from 'three';
 
 type Piece = {
   shape: number[][],
@@ -26,13 +36,13 @@ const PIECES: Piece[] = [
 })
 export class TetrisSceneComponent implements OnInit {
   @ViewChild('rendererContainer', {static: true}) rendererContainer!: ElementRef;
-  renderer!: THREE.WebGLRenderer;
-  scene!: THREE.Scene;
-  camera!: THREE.OrthographicCamera;
+  renderer!: WebGLRenderer;
+  scene!: Scene;
+  camera!: OrthographicCamera;
   board: number[][] = [];
   boardWidth = 10;
   boardHeight = 20;
-  grid: THREE.Group = new THREE.Group();
+  grid: Group = new Group();
   currentPiece: Piece;
   interval: any;
 
@@ -49,19 +59,19 @@ export class TetrisSceneComponent implements OnInit {
   }
 
   initThreeJS(): void {
-    this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x000000);
+    this.scene = new Scene();
+    this.scene.background = new Color(0x000000);
 
     const containerWidth = this.rendererContainer.nativeElement.clientWidth;
     const containerHeight = this.rendererContainer.nativeElement.clientHeight;
     const aspect = containerWidth / containerHeight;
 
     const d = 10;
-    this.camera = new THREE.OrthographicCamera(-d * aspect, d * aspect, d, -d, 1, 1000);
+    this.camera = new OrthographicCamera(-d * aspect, d * aspect, d, -d, 1, 1000);
     this.camera.position.set(this.boardWidth / 2, -this.boardHeight / 2, 20);
-    this.camera.lookAt(new THREE.Vector3(this.boardWidth / 2, -this.boardHeight / 2, 0));
+    this.camera.lookAt(new Vector3(this.boardWidth / 2, -this.boardHeight / 2, 0));
 
-    this.renderer = new THREE.WebGLRenderer();
+    this.renderer = new WebGLRenderer();
     this.renderer.setSize(containerWidth, containerHeight);
     this.rendererContainer.nativeElement.appendChild(this.renderer.domElement);
 
@@ -81,13 +91,13 @@ export class TetrisSceneComponent implements OnInit {
   drawBoard(): void {
     this.grid.clear();
     const cubeSize = 1;
-    const geometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
-    const material = new THREE.MeshBasicMaterial({color: 0x00ff00, wireframe: true});
+    const geometry = new BoxGeometry(cubeSize, cubeSize, cubeSize);
+    const material = new MeshBasicMaterial({color: 0x00ff00, wireframe: true});
 
     for (let y = 0; y < this.boardHeight; y++) {
       for (let x = 0; x < this.boardWidth; x++) {
         if (this.board[y][x] !== 0) {
-          const cube = new THREE.Mesh(geometry, material);
+          const cube = new Mesh(geometry, material);
           cube.position.set(x, -y, 0);
           this.grid.add(cube);
         }
@@ -98,13 +108,13 @@ export class TetrisSceneComponent implements OnInit {
 
   drawPiece(): void {
     const cubeSize = 1;
-    const geometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
-    const material = new THREE.MeshBasicMaterial({color: this.currentPiece.color});
+    const geometry = new BoxGeometry(cubeSize, cubeSize, cubeSize);
+    const material = new MeshBasicMaterial({color: this.currentPiece.color});
 
     for (let y = 0; y < this.currentPiece.shape.length; y++) {
       for (let x = 0; x < this.currentPiece.shape[y].length; x++) {
         if (this.currentPiece.shape[y][x] !== 0) {
-          const cube = new THREE.Mesh(geometry, material);
+          const cube = new Mesh(geometry, material);
           cube.position.set(this.currentPiece.x + x, -(this.currentPiece.y + y), 0);
           this.grid.add(cube);
         }

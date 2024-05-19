@@ -1,11 +1,31 @@
-import { Component, OnInit, HostListener, ElementRef, AfterViewInit } from '@angular/core';
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { CharacterControls } from './characterControls';  // Adjust the path as necessary
-import { UtilsService } from './utils.service';
-import { BoxHelper, LoadingManager, Scene } from "three";
-import { World, Body, Box, Vec3 } from 'cannon-es';
+import {AfterViewInit, Component, ElementRef, HostListener, OnInit} from '@angular/core';
+import {
+  AmbientLight,
+  AnimationAction,
+  AnimationMixer,
+  Box3,
+  BoxHelper,
+  Clock,
+  Color,
+  DirectionalLight,
+  LoadingManager,
+  Mesh,
+  MeshStandardMaterial,
+  Object3D,
+  PerspectiveCamera,
+  PlaneGeometry,
+  RepeatWrapping,
+  Scene,
+  Texture,
+  TextureLoader,
+  Vector3,
+  WebGLRenderer
+} from 'three';
+import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
+import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
+import {CharacterControls} from './characterControls'; // Adjust the path as necessary
+import {UtilsService} from './utils.service';
+import {Body, Box, Vec3, World} from 'cannon-es';
 
 @Component({
   selector: 'app-test-scene',
@@ -14,12 +34,12 @@ import { World, Body, Box, Vec3 } from 'cannon-es';
   styleUrls: ['./test-scene.component.css']
 })
 export class TestSceneComponent implements OnInit, AfterViewInit {
-  private scene!: THREE.Scene;
-  private camera!: THREE.PerspectiveCamera;
-  private renderer!: THREE.WebGLRenderer;
+  private scene!: Scene;
+  private camera!: PerspectiveCamera;
+  private renderer!: WebGLRenderer;
   private orbitControls!: OrbitControls;
   private characterControls!: CharacterControls;
-  private clock!: THREE.Clock;
+  private clock!: Clock;
   private keysPressed!: any;
 
   loadingManger: LoadingManager = new LoadingManager();
@@ -45,15 +65,15 @@ export class TestSceneComponent implements OnInit, AfterViewInit {
 
   private initScene(): void {
     // SCENE
-    this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0xa8def0);
+    this.scene = new Scene();
+    this.scene.background = new Color(0xa8def0);
 
     // CAMERA
-    this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+    this.camera = new PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
     this.camera.position.set(0, 5, 5);
 
     // RENDERER
-    this.renderer = new THREE.WebGLRenderer({ antialias: true });
+    this.renderer = new WebGLRenderer({ antialias: true });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.shadowMap.enabled = true;
@@ -75,7 +95,7 @@ export class TestSceneComponent implements OnInit, AfterViewInit {
     this.generateFloor();
 
     // MODEL WITH ANIMATIONS
-    const loadingManager = new THREE.LoadingManager();
+    const loadingManager = new LoadingManager();
     const gltfLoader = new GLTFLoader(loadingManager);
     //assets/models/dino.glb
     gltfLoader.load('assets/models/forest-monster-final.glb', (gltf) => {
@@ -87,12 +107,12 @@ export class TestSceneComponent implements OnInit, AfterViewInit {
       // Add BoxHelper for the model
 
       model.traverse((object) => {
-        if ((object as THREE.Mesh).isMesh) (object as THREE.Mesh).castShadow = true;
+        if ((object as Mesh).isMesh) (object as Mesh).castShadow = true;
       });
       this.scene.add(model);
 
-      const mixer = new THREE.AnimationMixer(model);
-      const animationsMap = new Map<string, THREE.AnimationAction>();
+      const mixer = new AnimationMixer(model);
+      const animationsMap = new Map<string, AnimationAction>();
       gltf.animations.filter(a => a.name !== 'TPose').forEach((a) => {
         animationsMap.set(a.name, mixer.clipAction(a));
       });
@@ -124,13 +144,13 @@ export class TestSceneComponent implements OnInit, AfterViewInit {
     document.addEventListener('keyup', (event) => this.onKeyUp(event), false);
 
     // CLOCK
-    this.clock = new THREE.Clock();
+    this.clock = new Clock();
   }
 
-  private createPhysicsBody(object: THREE.Object3D): Body {
+  private createPhysicsBody(object: Object3D): Body {
     // Get the bounding box of the object
-    const box = new THREE.Box3().setFromObject(object);
-    const size = new THREE.Vector3();
+    const box = new Box3().setFromObject(object);
+    const size = new Vector3();
     box.getSize(size);
 
     // Create a Cannon.js body
@@ -145,8 +165,8 @@ export class TestSceneComponent implements OnInit, AfterViewInit {
   }
 
   private addLights(): void {
-    this.scene.add(new THREE.AmbientLight(0xffffff, 0.7));
-    const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+    this.scene.add(new AmbientLight(0xffffff, 0.7));
+    const dirLight = new DirectionalLight(0xffffff, 1);
     dirLight.position.set(-60, 100, -10);
     dirLight.castShadow = true;
     dirLight.shadow.camera.top = 50;
@@ -161,7 +181,7 @@ export class TestSceneComponent implements OnInit, AfterViewInit {
   }
 
   private generateFloor(): void {
-    const textureLoader = new THREE.TextureLoader();
+    const textureLoader = new TextureLoader();
     const sandBaseColor = textureLoader.load('assets/textures/grass/tilable-IMG_0044.png');
     const sandNormalMap = textureLoader.load('assets/textures/grass/tilable-IMG_0044_nm.png');
     const sandHeightMap = textureLoader.load('assets/textures/grass/tilable-IMG_0044_dark.png');
@@ -170,8 +190,8 @@ export class TestSceneComponent implements OnInit, AfterViewInit {
     const WIDTH = 80;
     const LENGTH = 80;
 
-    const geometry = new THREE.PlaneGeometry(WIDTH, LENGTH, 512, 512);
-    const material = new THREE.MeshStandardMaterial({
+    const geometry = new PlaneGeometry(WIDTH, LENGTH, 512, 512);
+    const material = new MeshStandardMaterial({
       map: sandBaseColor!,
       normalMap: sandNormalMap!,
       displacementMap: sandHeightMap!,
@@ -183,7 +203,7 @@ export class TestSceneComponent implements OnInit, AfterViewInit {
     this.wrapAndRepeatTexture(material.displacementMap!);
     this.wrapAndRepeatTexture(material.aoMap!);
 
-    const floor = new THREE.Mesh(geometry, material);
+    const floor = new Mesh(geometry, material);
     floor.receiveShadow = true;
     floor.rotation.x = -Math.PI / 2;
     this.scene.add(floor);
@@ -196,8 +216,8 @@ export class TestSceneComponent implements OnInit, AfterViewInit {
     this.world.addBody(groundBody);
   }
 
-  private wrapAndRepeatTexture(map: THREE.Texture): void {
-    map.wrapS = map.wrapT = THREE.RepeatWrapping;
+  private wrapAndRepeatTexture(map: Texture): void {
+    map.wrapS = map.wrapT = RepeatWrapping;
     map.repeat.set(10, 10);
   }
 

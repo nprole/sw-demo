@@ -1,7 +1,6 @@
-import {AnimationAction, AnimationMixer, Camera, Group, LoadingManager, Quaternion, Scene, Vector3} from 'three';
+import {AnimationAction, AnimationMixer, Camera, Group, Quaternion, Vector3} from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import {A, D, DIRECTIONS, S, W} from './utils.service';
-import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader.js";
 
 export class CharacterControls {
   model: Group;

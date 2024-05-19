@@ -1,5 +1,5 @@
-import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import * as THREE from 'three';
+import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
+import {BoxGeometry, Color, Mesh, MeshBasicMaterial, PerspectiveCamera, Scene, WebGLRenderer} from 'three';
 
 @Component({
   selector: 'app-three-scene',
@@ -10,10 +10,10 @@ import * as THREE from 'three';
 })
 export class ThreeSceneComponent implements AfterViewInit {
   @ViewChild('rendererContainer') rendererContainer!: ElementRef;
-  renderer!: THREE.WebGLRenderer;
-  scene!: THREE.Scene;
-  camera!: THREE.PerspectiveCamera;
-  cube!: THREE.Mesh;
+  renderer!: WebGLRenderer;
+  scene!: Scene;
+  camera!: PerspectiveCamera;
+  cube!: Mesh;
 
   constructor() { }
 
@@ -27,23 +27,23 @@ export class ThreeSceneComponent implements AfterViewInit {
 
   initThreeJS(): void {
     // Create the scene
-    this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x000000);
+    this.scene = new Scene();
+    this.scene.background = new Color(0x000000);
 
     // Create the camera
-    this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    this.camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     this.camera.position.z = 5;
 
     // Create the renderer
-    this.renderer = new THREE.WebGLRenderer();
+    this.renderer = new WebGLRenderer();
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     console.log('Sent Renderer' , this.rendererContainer.nativeElement);
     this.rendererContainer.nativeElement.appendChild(this.renderer.domElement);
 
     // Create a cube
-    const geometry = new THREE.BoxGeometry();
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    this.cube = new THREE.Mesh(geometry, material);
+    const geometry = new BoxGeometry();
+    const material = new MeshBasicMaterial({ color: 0x00ff00 });
+    this.cube = new Mesh(geometry, material);
     this.scene.add(this.cube);
   }
 

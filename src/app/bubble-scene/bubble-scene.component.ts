@@ -1,12 +1,32 @@
-import { Component, ElementRef, HostListener, NgZone, ViewChild, OnInit } from '@angular/core';
-import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import {FontLoader} from "three/examples/jsm/loaders/FontLoader";
-import {TextGeometry, TextGeometryParameters} from "three/examples/jsm/geometries/TextGeometry";
+import {Component, ElementRef, HostListener, NgZone, OnInit, ViewChild} from '@angular/core';
+import {
+  AmbientLight,
+  AxesHelper,
+  BufferAttribute,
+  BufferGeometry,
+  GridHelper,
+  LineBasicMaterial,
+  LineSegments,
+  MathUtils,
+  Mesh,
+  MeshBasicMaterial,
+  MeshPhongMaterial,
+  PerspectiveCamera,
+  PointLight,
+  Scene,
+  Vector3,
+  WebGLRenderer
+} from 'three';
+import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
+import {FontLoader} from "three/examples/jsm/loaders/FontLoader.js";
+import {TextGeometry} from "three/examples/jsm/geometries/TextGeometry.js";
+import {ParametricGeometries} from "three/examples/jsm/geometries/ParametricGeometries";
+import SphereGeometry = ParametricGeometries.SphereGeometry;
+import {TextGeometryParameters} from "three/examples/jsm/geometries/TextGeometry";
 
 class Ball {
-  mesh!: THREE.Mesh;
-  velocity!: THREE.Vector3;
+  mesh!: Mesh;
+  velocity!: Vector3;
   mass!: number;
   radius!: number;
 }
@@ -20,15 +40,15 @@ class Ball {
 export class BubbleSceneComponent implements OnInit {
   @ViewChild('canvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
 
-  private renderer!: THREE.WebGLRenderer;
-  private scene!: THREE.Scene;
-  private camera!: THREE.PerspectiveCamera;
+  private renderer!: WebGLRenderer;
+  private scene!: Scene;
+  private camera!: PerspectiveCamera;
   private controls!: OrbitControls;
   private balls: Ball[] = [];
   private playerBall!: Ball;
   private keys: { [key: string]: boolean } = {};
   private readonly size = 500;
-  private playerLabel!: THREE.Mesh;
+  private playerLabel!: Mesh;
 
   constructor(private ngZone: NgZone) {}
 
@@ -39,20 +59,20 @@ export class BubbleSceneComponent implements OnInit {
 
   private initThreeJS(): void {
     const canvas = this.canvasRef.nativeElement;
-    this.renderer = new THREE.WebGLRenderer({ canvas });
+    this.renderer = new WebGLRenderer({ canvas });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
 
     // Set the clear color to white
     this.renderer.setClearColor(0xFFFFFF);
 
-    this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
+    this.scene = new Scene();
+    this.camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
     this.camera.position.z = this.size;
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-    this.controls.enableDamping = true;
-    this.controls.dampingFactor = 0.25;
-    this.controls.enableZoom = true;
+    this.controls['enableDamping'] = true;
+    this.controls['dampingFactor'] = 0.25;
+    this.controls['enableZoom'] = true;
 
     this.addLighting();
     this.addHelpers();
@@ -62,10 +82,10 @@ export class BubbleSceneComponent implements OnInit {
   }
 
   private addLighting(): void {
-    const ambientLight = new THREE.AmbientLight(0x404040);
+    const ambientLight = new AmbientLight(0x404040);
     this.scene.add(ambientLight);
 
-    const pointLight = new THREE.PointLight(0xffffff, 1);
+    const pointLight = new PointLight(0xffffff, 1);
     pointLight.position.set(50, 50, 50);
     this.scene.add(pointLight);
   }
@@ -74,13 +94,13 @@ export class BubbleSceneComponent implements OnInit {
   private addHelpers(): void {
     const size = this.size;
     const divisions = 10;
-    const gridHelper = new THREE.GridHelper(size * 2, divisions);
+    const gridHelper = new GridHelper(size * 2, divisions);
     this.scene.add(gridHelper);
 
-    const axesHelper = new THREE.AxesHelper(size);
+    const axesHelper = new AxesHelper(size);
     this.scene.add(axesHelper);
 
-    const boundaryGeometry = new THREE.BufferGeometry();
+    const boundaryGeometry = new BufferGeometry();
     const boundaryVertices = new Float32Array([
       -size, -size, -size,  size, -size, -size,
       size, -size, -size,  size,  size, -size,
@@ -97,19 +117,19 @@ export class BubbleSceneComponent implements OnInit {
       size,  size, -size,  size,  size,  size,
       -size,  size, -size, -size,  size,  size,
     ]);
-    boundaryGeometry.setAttribute('position', new THREE.BufferAttribute(boundaryVertices, 3));
-    const boundaryMaterial = new THREE.LineBasicMaterial({ color: 0x0000ff });
-    const boundaryLines = new THREE.LineSegments(boundaryGeometry, boundaryMaterial);
+    boundaryGeometry.setAttribute('position', new BufferAttribute(boundaryVertices, 3));
+    const boundaryMaterial = new LineBasicMaterial({ color: 0x0000ff });
+    const boundaryLines = new LineSegments(boundaryGeometry, boundaryMaterial);
     this.scene.add(boundaryLines);
   }
 
   private createBalls(): void {
-    const ballGeometry = new THREE.SphereGeometry(5, 32, 32);
+    const ballGeometry = new SphereGeometry(5, 32, 32);
     const size = this.size;
 
     for (let i = 0; i < 100; i++) {
-      const ballMaterial = new THREE.MeshPhongMaterial({ color: this.getRandomColor() });
-      const ball = new THREE.Mesh(ballGeometry, ballMaterial);
+      const ballMaterial = new MeshPhongMaterial({ color: this.getRandomColor() });
+      const ball = new Mesh(ballGeometry, ballMaterial);
       ball.position.set(
         (Math.random() - 0.5) * size * 2,
         (Math.random() - 0.5) * size * 2,
@@ -118,7 +138,7 @@ export class BubbleSceneComponent implements OnInit {
       const radius = 200;
       const ballObj: Ball = {
         mesh: ball,
-        velocity: new THREE.Vector3((Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2),
+        velocity: new Vector3((Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2),
         mass: 1,
         radius
       };
@@ -138,19 +158,19 @@ export class BubbleSceneComponent implements OnInit {
   }
 
   private createPlayerBall(): void {
-    const ballGeometry = new THREE.SphereGeometry(5, 32, 32);
-    const playerBallMaterial = new THREE.MeshPhongMaterial({
+    const ballGeometry = new SphereGeometry(5, 32, 32);
+    const playerBallMaterial = new MeshPhongMaterial({
       color: 0xFFFF00, // Bright yellow
       emissive: 0xFFFF00,
       emissiveIntensity: 0.5
     });
 
-    const playerMesh = new THREE.Mesh(ballGeometry, playerBallMaterial);
+    const playerMesh = new Mesh(ballGeometry, playerBallMaterial);
     playerMesh.position.set(0, 0, 0);
     const radius = 200;
     this.playerBall = {
       mesh: playerMesh,
-      velocity: new THREE.Vector3(0, 0, 0),
+      velocity: new Vector3(0, 0, 0),
       mass: 1,
       radius
     };
@@ -166,8 +186,8 @@ export class BubbleSceneComponent implements OnInit {
         height: 1,
       } as TextGeometryParameters);
 
-      const textMaterial = new THREE.MeshBasicMaterial({ color: 0x0000FF });
-      this.playerLabel = new THREE.Mesh(textGeometry, textMaterial);
+      const textMaterial = new MeshBasicMaterial({ color: 0x0000FF });
+      this.playerLabel = new Mesh(textGeometry, textMaterial);
       this.playerLabel.position.set(0, -10, 0);
       this.scene.add(this.playerLabel);
     });
@@ -211,15 +231,15 @@ export class BubbleSceneComponent implements OnInit {
     const pos = this.playerBall.mesh.position;
     if (pos.x <= -maxDistance || pos.x >= maxDistance) {
       velocity.x = -velocity.x;
-      pos.x = THREE.MathUtils.clamp(pos.x, -maxDistance, maxDistance);
+      pos.x = MathUtils.clamp(pos.x, -maxDistance, maxDistance);
     }
     if (pos.y <= -maxDistance || pos.y >= maxDistance) {
       velocity.y = -velocity.y;
-      pos.y = THREE.MathUtils.clamp(pos.y, -maxDistance, maxDistance);
+      pos.y = MathUtils.clamp(pos.y, -maxDistance, maxDistance);
     }
     if (pos.z <= -maxDistance || pos.z >= maxDistance) {
       velocity.z = -velocity.z;
-      pos.z = THREE.MathUtils.clamp(pos.z, -maxDistance, maxDistance);
+      pos.z = MathUtils.clamp(pos.z, -maxDistance, maxDistance);
     }
   }
 
@@ -258,15 +278,15 @@ export class BubbleSceneComponent implements OnInit {
       const pos = ball.mesh.position;
       if (pos.x <= -maxDistance || pos.x >= maxDistance) {
         ball.velocity.x = -ball.velocity.x;
-        pos.x = THREE.MathUtils.clamp(pos.x, -maxDistance, maxDistance);
+        pos.x = MathUtils.clamp(pos.x, -maxDistance, maxDistance);
       }
       if (pos.y <= -maxDistance || pos.y >= maxDistance) {
         ball.velocity.y = -ball.velocity.y;
-        pos.y = THREE.MathUtils.clamp(pos.y, -maxDistance, maxDistance);
+        pos.y = MathUtils.clamp(pos.y, -maxDistance, maxDistance);
       }
       if (pos.z <= -maxDistance || pos.z >= maxDistance) {
         ball.velocity.z = -ball.velocity.z;
-        pos.z = THREE.MathUtils.clamp(pos.z, -maxDistance, maxDistance);
+        pos.z = MathUtils.clamp(pos.z, -maxDistance, maxDistance);
       }
     });
   }

@@ -1,11 +1,24 @@
 import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
-import * as THREE from 'three';
-import {FontLoader} from "three/examples/jsm/loaders/FontLoader";
-import {TextGeometry} from "three/examples/jsm/geometries/TextGeometry";
+import {FontLoader} from "three/examples/jsm/loaders/FontLoader.js";
+import {TextGeometry} from "three/examples/jsm/geometries/TextGeometry.js";
+import {
+  AmbientLight,
+  CanvasTexture,
+  Clock,
+  DoubleSide,
+  Mesh,
+  MeshBasicMaterial,
+  PerspectiveCamera, PlaneGeometry,
+  Scene,
+  Vector3,
+  WebGLRenderer
+} from "three";
+import {ParametricGeometries} from "three/examples/jsm/geometries/ParametricGeometries";
+import SphereGeometry = ParametricGeometries.SphereGeometry;
 
 class Ball {
-  mesh!: THREE.Mesh;
-  velocity!: THREE.Vector3;
+  mesh!: Mesh;
+  velocity!: Vector3;
   mass!: number;
   radius!: number;
 }
@@ -17,12 +30,12 @@ class Ball {
   styleUrls: ['./office-scene.component.css']
 })
 export class OfficeSceneComponent implements OnInit {
-  private scene!: THREE.Scene;
-  private camera!: THREE.PerspectiveCamera;
-  private renderer!: THREE.WebGLRenderer;
-  private ball!: THREE.Mesh;
-  private moveDirection = new THREE.Vector3();
-  private clock = new THREE.Clock();
+  private scene!: Scene;
+  private camera!: PerspectiveCamera;
+  private renderer!: WebGLRenderer;
+  private ball!: Mesh;
+  private moveDirection = new Vector3();
+  private clock = new Clock();
   private playerBall!: Ball;
   private keys: { [key: string]: boolean } = {};
   private readonly size = 50; // Adjust size if needed
@@ -41,34 +54,34 @@ export class OfficeSceneComponent implements OnInit {
 
   private initThreeJS(): void {
     // Set up the scene
-    this.scene = new THREE.Scene();
+    this.scene = new Scene();
 
     // Set up the camera
-    this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    this.camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     this.camera.position.set(0, 10, 20);
 
     // Set up the renderer
-    this.renderer = new THREE.WebGLRenderer();
+    this.renderer = new WebGLRenderer();
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.elRef.nativeElement.querySelector('#gameContainer').appendChild(this.renderer.domElement);
 
     // Create the player (ball)
-    const ballGeometry = new THREE.SphereGeometry(1, 32, 32);
-    const ballMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-    this.ball = new THREE.Mesh(ballGeometry, ballMaterial);
+    const ballGeometry = new SphereGeometry(1, 32, 32);
+    const ballMaterial = new MeshBasicMaterial({ color: 0xff0000 });
+    this.ball = new Mesh(ballGeometry, ballMaterial);
     this.ball.position.y = 1; // Raise the ball above the floor
     const radius = 1; // Ball radius should match geometry
 
     this.playerBall = {
       mesh: this.ball,
-      velocity: new THREE.Vector3(0, 0, 0),
+      velocity: new Vector3(0, 0, 0),
       mass: 1,
       radius
     };
     this.scene.add(this.ball);
 
     // Add ambient light to the scene
-    const ambientLight = new THREE.AmbientLight(0x404040);
+    const ambientLight = new AmbientLight(0x404040);
     this.scene.add(ambientLight);
   }
 
@@ -89,10 +102,10 @@ export class OfficeSceneComponent implements OnInit {
       context.fillRect(0, 0, canvas.width, canvas.height);
 
       // Create texture and apply to the floor
-      const texture = new THREE.CanvasTexture(canvas);
-      const floorGeometry = new THREE.PlaneGeometry(this.size * 2, this.size * 2);
-      const floorMaterial = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
-      const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+      const texture = new CanvasTexture(canvas);
+      const floorGeometry = new PlaneGeometry(this.size * 2, this.size * 2);
+      const floorMaterial = new MeshBasicMaterial({ map: texture, side: DoubleSide });
+      const floor = new Mesh(floorGeometry, floorMaterial);
       floor.rotation.x = Math.PI / 2;
       this.scene.add(floor);
     }
@@ -108,8 +121,8 @@ export class OfficeSceneComponent implements OnInit {
         curveSegments: 12,
         bevelEnabled: false
       });
-      const textMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
-      const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+      const textMaterial = new MeshBasicMaterial({ color: 0xffffff });
+      const textMesh = new Mesh(textGeometry, textMaterial);
       textMesh.rotation.x = -Math.PI / 2;
       textMesh.position.set(-15, 0.1, -15); // Adjust position as needed
       this.scene.add(textMesh);

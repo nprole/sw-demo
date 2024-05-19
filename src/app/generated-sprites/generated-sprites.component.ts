@@ -1,5 +1,5 @@
-import { Component, HostListener, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from "@angular/common";
+import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
+import {CommonModule} from "@angular/common";
 
 @Component({
   selector: 'app-generated-sprites',
@@ -38,10 +38,19 @@ export class GeneratedSpritesComponent implements OnInit, OnDestroy {
     'assets/sprites/full/example_26.png',
     'assets/sprites/full/example_27.png',
   ];
-
+  public logos = [
+    'assets/logo/example_1.png',
+    'assets/logo/example_2.png',
+    'assets/logo/example_3.png',
+    'assets/logo/example_4.png',
+    'assets/logo/example_5.png',
+    'assets/logo/example_6.png',
+    'assets/logo/example_7.png',
+  ];
   public currentSlide: number = 0;
+  public currentLogoSlide: number = 0;
   private intervalId: any;
-  private intervalTime: number = 3000; // Change image every 3 seconds
+  private intervalTime: number = 5000; // Change image every 3 seconds
 
   constructor() {}
 
@@ -55,7 +64,8 @@ export class GeneratedSpritesComponent implements OnInit, OnDestroy {
 
   startCarousel(): void {
     this.intervalId = setInterval(() => {
-      this.next();
+      this.next('sprite');
+      this.next('logo');
     }, this.intervalTime);
   }
 
@@ -64,29 +74,49 @@ export class GeneratedSpritesComponent implements OnInit, OnDestroy {
       clearInterval(this.intervalId);
     }
   }
-
-  next(): void {
-    if (this.currentSlide < this.sprites.length - 1) {
-      this.currentSlide++;
+//TODO odvratno
+  next(carouselName: string): void {
+    if(carouselName === 'sprite') {
+      if (this.currentSlide < this.sprites.length - 1) {
+        this.currentSlide++;
+      } else {
+        this.currentSlide = 0;
+      }
     } else {
-      this.currentSlide = 0;
+      if (this.currentSlide < this.sprites.length - 1) {
+        this.currentSlide++;
+      } else {
+        this.currentSlide = 0;
+      }
     }
+
+
   }
-
-  previous(): void {
-    if (this.currentSlide > 0) {
-      this.currentSlide--;
-    } else {
-      this.currentSlide = this.sprites.length - 1;
+  //TODO ovo nebi vako piso nikad :')
+  previous(carouselName: string): void {
+    if(carouselName === 'sprite'){
+      if (this.currentSlide > 0) {
+        this.currentSlide--;
+      } else {
+        this.currentSlide = this.sprites.length - 1;
+      }
+    }else {
+      if (this.currentLogoSlide > 0) {
+        this.currentLogoSlide--;
+      } else {
+        this.currentLogoSlide = this.logos.length - 1;
+      }
     }
+
   }
 
   @HostListener('window:keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent): void {
     if (event.key === 'ArrowRight' || event.key === 'd' || event.key === 'D') {
-      this.next();
+      this.next('sprite');
+      this.next('logo');
     } else if (event.key === 'ArrowLeft' || event.key === 'a' || event.key === 'A') {
-      this.previous();
-    }
+      this.previous('sprite');
+      this.previous('logo');    }
   }
 }
