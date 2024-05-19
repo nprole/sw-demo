@@ -1,14 +1,27 @@
 <div class="card">
-  <h1 class="card-header">Scenes Overview</h1>
-  <div class="button-container d-flex">
-    <div *ngFor="let example of examples">
-      <button class='btn btn-secondary' (click)="navigateTo(example.route)">{{example.name}}</button>
+  <h1 class="card-header">Three.js Demo Overview</h1>
+  <div class="card-body flex-column justify-content-center align-items-center">
+    <div class="d-flex justify-content-center">
+      <div class="logo-big align-self-center align-self-center justify-content-center  "></div>
     </div>
-  </div>
-  <div class="card-body">
+    <div class="button-container d-flex justify-content-center">
+      <div *ngFor="let example of examples;let i = index">
+        <button class='btn btn-secondary' (click)="navigateTo(example.route)" *ngIf="i < 4">{{example.name}}</button>
+      </div>
+    </div>
     <div class="description">
-      <div *ngFor="let example of examples">
-        <div (click)="navigateTo(example.route)">{{example.description}}</div>
+      <div *ngFor="let example of examples;let i = index">
+        <div (click)="navigateTo(example.route)" *ngIf="i < 4">{{example.description}} </div>
+      </div>
+    </div>
+    <div class="button-container d-flex justify-content-center">
+      <div *ngFor="let example of examples;let i = index">
+        <button class='btn btn-secondary' (click)="navigateTo(example.route)" *ngIf="i >= 4">{{example.name}}</button>
+      </div>
+    </div>
+    <div class="description">
+      <div *ngFor="let example of examples;let i = index">
+        <div (click)="navigateTo(example.route)" *ngIf="i >= 4">{{example.description}}</div>
       </div>
     </div>
   </div>

@@ -24,6 +24,11 @@ footer {
   height: 100%;
 }
 
+
+.card-header {
+  text-align: center;
+}
+
 /* Header */
 header {
   background: black; /* Dark sea green */
@@ -63,9 +68,18 @@ h1 h2 h3 {
 
 }
 
+
+
 .logo {
   width: 60px; /* Adjust based on actual icon size */
   height: 60px; /* Adjust based on actual icon size */
+  background-image: url('./assets/logo.png'); /* Path to your sprite sheet */
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.logo-big {
+  width: 512px; /* Adjust based on actual icon size */
+  height: 512px; /* Adjust based on actual icon size */
   background-image: url('./assets/logo.png'); /* Path to your sprite sheet */
   background-repeat: no-repeat;
   background-size: contain;
