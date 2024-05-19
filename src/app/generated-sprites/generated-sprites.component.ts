@@ -29,7 +29,14 @@ export class GeneratedSpritesComponent implements OnInit, OnDestroy {
     'assets/sprites/full/example_17.png',
     'assets/sprites/full/example_18.png',
     'assets/sprites/full/example_19.png',
-    'assets/sprites/full/example_20.png'
+    'assets/sprites/full/example_20.png',
+    'assets/sprites/full/example_21.png',
+    'assets/sprites/full/example_22.png',
+    'assets/sprites/full/example_23.png',
+    'assets/sprites/full/example_24.png',
+    'assets/sprites/full/example_25.png',
+    'assets/sprites/full/example_26.png',
+    'assets/sprites/full/example_27.png',
   ];
 
   public currentSlide: number = 0;
