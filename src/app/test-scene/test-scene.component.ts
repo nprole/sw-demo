@@ -6,9 +6,9 @@ import {
   Box3,
   BoxHelper,
   Clock,
-  Color,
-  DirectionalLight,
-  LoadingManager,
+  Color, CubeTextureLoader,
+  DirectionalLight, EquirectangularReflectionMapping,
+  LoadingManager, Material,
   Mesh,
   MeshStandardMaterial,
   Object3D,
@@ -26,6 +26,7 @@ import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 import {CharacterControls} from './characterControls'; // Adjust the path as necessary
 import {UtilsService} from './utils.service';
 import {Body, Box, Vec3, World} from 'cannon-es';
+import {RGBELoader} from "three/examples/jsm/loaders/RGBELoader";
 
 @Component({
   selector: 'app-test-scene',
@@ -43,14 +44,19 @@ export class TestSceneComponent implements OnInit, AfterViewInit {
   private keysPressed!: any;
 
   loadingManger: LoadingManager = new LoadingManager();
-  private models = ['assets/models/rock-001.glb', 'assets/models/tree-002.glb', 'assets/models/trunk-001.glb', 'assets/models/trunk-002.glb'];
+  private models = ['assets/models/rock-001.glb',
+    'assets/models/tree-002.glb',
+    'assets/models/trunk-001.glb',
+    'assets/models/trunk-002.glb',
+    'assets/models/low-poly-tree.glb'];
 
   private loader = new GLTFLoader(this.loadingManger);
 
   // Create the Cannon.js world
   private world!: World;
 
-  constructor(private elRef: ElementRef, private utilsService: UtilsService) {}
+  constructor(private elRef: ElementRef, private utilsService: UtilsService) {
+  }
 
   ngOnInit(): void {
     this.world = new World();
@@ -69,11 +75,11 @@ export class TestSceneComponent implements OnInit, AfterViewInit {
     this.scene.background = new Color(0xa8def0);
 
     // CAMERA
-    this.camera = new PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+    this.camera = new PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 2000);
     this.camera.position.set(0, 5, 5);
 
     // RENDERER
-    this.renderer = new WebGLRenderer({ antialias: true });
+    this.renderer = new WebGLRenderer({antialias: true});
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.shadowMap.enabled = true;
@@ -81,11 +87,11 @@ export class TestSceneComponent implements OnInit, AfterViewInit {
 
     // CONTROLS
     this.orbitControls = new OrbitControls(this.camera, this.renderer.domElement);
-    this.orbitControls.enableDamping = true;
-    this.orbitControls.minDistance = 5;
-    this.orbitControls.maxDistance = 15;
-    this.orbitControls.enablePan = false;
-    this.orbitControls.maxPolarAngle = Math.PI / 2 - 0.05;
+    this.orbitControls['enableDamping'] = true;
+    this.orbitControls['minDistance'] = 5;
+    this.orbitControls['maxDistance'] = 15;
+    this.orbitControls['enablePan'] = false;
+    this.orbitControls['maxPolarAngle'] = Math.PI / 2 - 0.05;
     this.orbitControls.update();
 
     // LIGHTS
@@ -94,22 +100,33 @@ export class TestSceneComponent implements OnInit, AfterViewInit {
     // FLOOR
     this.generateFloor();
 
-    // MODEL WITH ANIMATIONS
+    // Load model
     const loadingManager = new LoadingManager();
     const gltfLoader = new GLTFLoader(loadingManager);
-    //assets/models/dino.glb
     gltfLoader.load('assets/models/forest-monster-final.glb', (gltf) => {
       const model = gltf.scene;
 
       const boxHelper = new BoxHelper(model);
       model.add(boxHelper);
       model.scale.set(0.1, 0.1, 0.1);
-      // Add BoxHelper for the model
 
       model.traverse((object) => {
         if ((object as Mesh).isMesh) (object as Mesh).castShadow = true;
       });
+
       this.scene.add(model);
+
+      // Create a physics body for the model
+      const shape = new Box(new Vec3(0.5, 0.5, 0.5)); // Adjust size as needed
+      const body = new Body({
+        mass: 1,
+        shape: shape,
+        position: new Vec3(model.position.x, model.position.y, model.position.z),
+      });
+      this.world.addBody(body);
+
+      // Save reference to the physics body
+      model.userData['physicsBody'] = body;
 
       const mixer = new AnimationMixer(model);
       const animationsMap = new Map<string, AnimationAction>();
@@ -119,7 +136,6 @@ export class TestSceneComponent implements OnInit, AfterViewInit {
 
       this.characterControls = new CharacterControls(model, mixer, animationsMap, this.orbitControls, this.camera, 'Idle');
     });
-
     for (let i = 0; i < 30; i++) {
       const modelIndex = Math.floor(Math.random() * this.models.length);
       const modelPath = this.models[modelIndex];
@@ -134,7 +150,8 @@ export class TestSceneComponent implements OnInit, AfterViewInit {
         this.world.addBody(body);
 
         object.userData['physicsBody'] = body;
-      }, () => {}, (error) => {
+      }, () => {
+      }, (error) => {
         console.error('An error happened', error);
       });
     }
@@ -146,7 +163,6 @@ export class TestSceneComponent implements OnInit, AfterViewInit {
     // CLOCK
     this.clock = new Clock();
   }
-
   private createPhysicsBody(object: Object3D): Body {
     // Get the bounding box of the object
     const box = new Box3().setFromObject(object);
@@ -157,7 +173,36 @@ export class TestSceneComponent implements OnInit, AfterViewInit {
     const shape = new Box(new Vec3(size.x / 2, size.y / 2, size.z / 2));
     const body = new Body({
       mass: 1, // Set mass
-      position: new Vec3(object.position.x, object.position.y, object.position.z)
+      position: new Vec3(
+        object.position.x,
+        object.position.y + size.y / 2,
+        object.position.z
+      )
+    });
+    body.addShape(shape);
+
+    return body;
+  }
+
+  private addSkyTexture(): void {
+    const rgbeLoader = new RGBELoader();
+    rgbeLoader.load('assets/texture/sky/sky.exr', (texture) => {
+      texture.mapping = EquirectangularReflectionMapping;
+      this.scene.background = texture;
+      this.scene.environment = texture; // Optional: to use the texture for environment lighting
+    });
+  }
+  PhysicsBody(object: Object3D): Body {
+    // Get the bounding box of the object
+    const box = new Box3().setFromObject(object);
+    const size = new Vector3();
+    box.getSize(size);
+
+    // Create a Cannon.js body
+    const shape = new Box(new Vec3(size.x / 2, size.y / 2, size.z / 2));
+    const body = new Body({
+      mass: 1, // Set mass
+      position: new Vec3(object.position.x, object.position.y + size.y / 2, object.position.z)
     });
     body.addShape(shape);
 
@@ -187,15 +232,15 @@ export class TestSceneComponent implements OnInit, AfterViewInit {
     const sandHeightMap = textureLoader.load('assets/textures/grass/tilable-IMG_0044_dark.png');
     const sandAmbientOcclusion = textureLoader.load('assets/textures/grass/tilable-IMG_0044_lush.png');
 
-    const WIDTH = 80;
-    const LENGTH = 80;
+    const WIDTH = 200;
+    const LENGTH = 200;
 
     const geometry = new PlaneGeometry(WIDTH, LENGTH, 512, 512);
     const material = new MeshStandardMaterial({
       map: sandBaseColor!,
       normalMap: sandNormalMap!,
       displacementMap: sandHeightMap!,
-      displacementScale: 0.1,
+      displacementScale: 0,
       aoMap: sandAmbientOcclusion!
     });
     this.wrapAndRepeatTexture(material.map!);
@@ -209,10 +254,10 @@ export class TestSceneComponent implements OnInit, AfterViewInit {
     this.scene.add(floor);
 
     // Add ground to physics world
-    const groundShape = new Box(new Vec3(40, 1, 40)); // Adjust size to match the Three.js ground plane
-    const groundBody = new Body({ mass: 0 });
+    const groundShape = new Box(new Vec3(40, 0, 40)); // Adjust size to match the Three.js ground plane
+    const groundBody = new Body({mass: 0});
     groundBody.addShape(groundShape);
-    groundBody.position.set(0, -1, 0); // Ensure it matches the position of the Three.js ground plane
+    groundBody.position.set(0, -0.01, 0); // Ensure it matches the position of the Three.js ground plane
     this.world.addBody(groundBody);
   }
 
@@ -251,11 +296,11 @@ export class TestSceneComponent implements OnInit, AfterViewInit {
 
 // Update the position of the Three.js objects to match the physics bodies
     this.scene.children.forEach((object) => {
-      if (object.userData['physicsBody']) {
+  /*    if (object.userData['physicsBody']) {
         const body = object.userData['physicsBody'];
-        object.position.copy(body.position);
-        object.quaternion.copy(body.quaternion);
-      }
+        object.position.set(body.position.x, body.position.y, body.position.z);
+        object.quaternion.set(body.quaternion.x, body.quaternion.y, body.quaternion.z, body.quaternion.w);
+      }*/
     });
 
 
