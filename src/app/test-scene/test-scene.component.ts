@@ -27,6 +27,7 @@ import {CharacterControls} from './characterControls'; // Adjust the path as nec
 import {UtilsService} from './utils.service';
 import {Body, Box, Vec3, World} from 'cannon-es';
 import {RGBELoader} from "three/examples/jsm/loaders/RGBELoader";
+import { GUI } from 'dat.gui';
 
 @Component({
   selector: 'app-test-scene',
@@ -42,7 +43,7 @@ export class TestSceneComponent implements OnInit, AfterViewInit {
   private characterControls!: CharacterControls;
   private clock!: Clock;
   private keysPressed!: any;
-
+  private player: any;
   loadingManger: LoadingManager = new LoadingManager();
   private models = ['assets/models/rock-001.glb',
     'assets/models/tree-002.glb',
@@ -59,6 +60,7 @@ export class TestSceneComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.player = null;
     this.world = new World();
     this.world.gravity.set(0, -9.82, 0); // Set gravity
     this.keysPressed = {};
@@ -94,6 +96,10 @@ export class TestSceneComponent implements OnInit, AfterViewInit {
     this.orbitControls['maxPolarAngle'] = Math.PI / 2 - 0.05;
     this.orbitControls.update();
 
+
+
+    this.addSkyTexture();
+
     // LIGHTS
     this.addLights();
 
@@ -103,12 +109,15 @@ export class TestSceneComponent implements OnInit, AfterViewInit {
     // Load model
     const loadingManager = new LoadingManager();
     const gltfLoader = new GLTFLoader(loadingManager);
-    gltfLoader.load('assets/models/forest-monster-final.glb', (gltf) => {
+    this.player = gltfLoader.load('assets/models/forest-monster-final.glb', (gltf): void => {
       const model = gltf.scene;
 
       const boxHelper = new BoxHelper(model);
       model.add(boxHelper);
       model.scale.set(0.1, 0.1, 0.1);
+      // GUI setup
+      const gui = new GUI();
+      const characterFolder = gui.addFolder('Character');
 
       model.traverse((object) => {
         if ((object as Mesh).isMesh) (object as Mesh).castShadow = true;
@@ -186,7 +195,7 @@ export class TestSceneComponent implements OnInit, AfterViewInit {
 
   private addSkyTexture(): void {
     const rgbeLoader = new RGBELoader();
-    rgbeLoader.load('assets/texture/sky/sky.exr', (texture) => {
+    rgbeLoader.load('assets/textures/sky/sky.hdr', (texture) => {
       texture.mapping = EquirectangularReflectionMapping;
       this.scene.background = texture;
       this.scene.environment = texture; // Optional: to use the texture for environment lighting
@@ -224,7 +233,22 @@ export class TestSceneComponent implements OnInit, AfterViewInit {
     dirLight.shadow.mapSize.height = 4096;
     this.scene.add(dirLight);
   }
+// Function to check collision
+  private checkCollision(mainModel: any, otherModels: any) {
+    const mainBox = new Box3().setFromObject(mainModel);
 
+    for (let i = 0; i < otherModels.length; i++) {
+      const otherBox = new Box3().setFromObject(otherModels[i]);
+
+      if (mainBox.intersectsBox(otherBox)) {
+        // Handle collision
+        console.log('Collision detected with model:', otherModels[i]);
+        return true;
+      }
+    }
+
+    return false;
+  }
   private generateFloor(): void {
     const textureLoader = new TextureLoader();
     const sandBaseColor = textureLoader.load('assets/textures/grass/tilable-IMG_0044.png');
@@ -296,7 +320,12 @@ export class TestSceneComponent implements OnInit, AfterViewInit {
 
 // Update the position of the Three.js objects to match the physics bodies
     this.scene.children.forEach((object) => {
-  /*    if (object.userData['physicsBody']) {
+   //   console.log('Log' , object);
+ /*     if (this.checkCollision(mainModel, otherModels)) {
+        // Reverse movement or stop the main model from moving through other models
+        undoMoveMainModel();
+      }*/
+      /*if (object.userData['physicsBody']) {
         const body = object.userData['physicsBody'];
         object.position.set(body.position.x, body.position.y, body.position.z);
         object.quaternion.set(body.quaternion.x, body.quaternion.y, body.quaternion.z, body.quaternion.w);
