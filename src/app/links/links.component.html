@@ -1,0 +1,11 @@
+<div class="container my-5">
+  <h1 class="text-center mb-4">Useful Links</h1>
+  <div *ngFor="let linkCategory of links" class="mb-5">
+    <h2 class="text-center">{{ linkCategory.category }}</h2>
+    <div class="list-group">
+      <a *ngFor="let link of linkCategory.items" [href]="link.url" target="_blank" class="list-group-item list-group-item-action text-center">
+        {{ link.name }}
+      </a>
+    </div>
+  </div>
+</div>
