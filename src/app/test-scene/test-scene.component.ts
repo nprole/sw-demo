@@ -109,12 +109,15 @@ export class TestSceneComponent implements OnInit, AfterViewInit {
     // Load model
     const loadingManager = new LoadingManager();
     const gltfLoader = new GLTFLoader(loadingManager);
-    this.player = gltfLoader.load('assets/models/forest-monster-final.glb', (gltf): void => {
+    gltfLoader.load('assets/models/forest-monster-final.glb', (gltf): void => {
       const model = gltf.scene;
 
-      const boxHelper = new BoxHelper(model);
+    /*  const boxHelper = new BoxHelper(model);
       model.add(boxHelper);
       model.scale.set(0.1, 0.1, 0.1);
+      */
+      model.scale.set(0.1, 0.1, 0.1);
+
       // GUI setup
       const gui = new GUI();
       const characterFolder = gui.addFolder('Character');
@@ -253,8 +256,8 @@ export class TestSceneComponent implements OnInit, AfterViewInit {
     const textureLoader = new TextureLoader();
     const sandBaseColor = textureLoader.load('assets/textures/grass/tilable-IMG_0044.png');
     const sandNormalMap = textureLoader.load('assets/textures/grass/tilable-IMG_0044_nm.png');
-    const sandHeightMap = textureLoader.load('assets/textures/grass/tilable-IMG_0044_dark.png');
-    const sandAmbientOcclusion = textureLoader.load('assets/textures/grass/tilable-IMG_0044_lush.png');
+    const sandHeightMap = textureLoader.load('assets/textures/grass/tilable-IMG_0044-dark.png');
+    const sandAmbientOcclusion = textureLoader.load('assets/textures/grass/tilable-IMG_0044-lush.png');
 
     const WIDTH = 200;
     const LENGTH = 200;
