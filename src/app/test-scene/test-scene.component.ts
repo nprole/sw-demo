@@ -243,8 +243,11 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
 
   generateForest() {
     const loader = new FBXLoader();
+    const textureLoader = new TextureLoader();
+    const texture = textureLoader.load('assets/models/trees/Textures/T_Tree_tropical.png');
     for(let tree of this.modelsFbx){
       loader.load(tree, (fbx) => {
+
         const object = fbx;
         object.scale.set(0.02, 0.02, 0.02); // Scale the model down
         object.rotation.y = Math.PI / 4; // Rotate the model
@@ -253,6 +256,10 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
         let material: Material | Material[] = [];
 
         object.traverse((child) => {
+          if ((child as Mesh).isMesh) {
+            const mesh = child as Mesh;
+            (mesh.material as MeshStandardMaterial).map = texture;
+          }
           if ((child as Mesh).isMesh) {
             const mesh = child as Mesh;
             geometry = mesh.geometry;
@@ -264,8 +271,10 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
         const instancedMesh = new InstancedMesh(geometry, material, instanceCount);
 
         const dummy = new Object3D();
-        for (let i = 0; i < instanceCount; i++) {
+        if(tree !== 'assets/models/animals/deer1.fbx'){
           dummy.scale.set(0.02, 0.02, 0.02); // Scale the model down
+        }
+        for (let i = 0; i < instanceCount; i++) {
           dummy.position.set(
             Math.random() * 500 - 250,
             0,
