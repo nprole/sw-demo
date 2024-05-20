@@ -4,12 +4,17 @@ import {
   AnimationAction,
   AnimationMixer,
   Box3,
-  BoxHelper,
+  BufferGeometry,
   Clock,
-  Color, CubeTextureLoader,
-  DirectionalLight, EquirectangularReflectionMapping, Fog,
-  LoadingManager, Material,
-  Mesh, MeshBasicMaterial,
+  Color,
+  DirectionalLight,
+  EquirectangularReflectionMapping,
+  Fog,
+  InstancedMesh,
+  LoadingManager,
+  Material,
+  Mesh,
+  MeshBasicMaterial,
   MeshStandardMaterial,
   Object3D,
   PerspectiveCamera,
@@ -74,7 +79,8 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
     'assets/models/trees/Fbx/Tree_Tropic_017.fbx',
     'assets/models/trees/Fbx/Tree_Tropic_018.fbx',
     'assets/models/trees/Fbx/Tree_Tropic_019.fbx',
-    'assets/models/trees/Fbx/Tree_Tropic_020.fbx'
+    'assets/models/trees/Fbx/Tree_Tropic_020.fbx',
+    'assets/models/animals/deer1.fbx',
   ];
 
   private loader = new GLTFLoader(this.loadingManger);
@@ -235,63 +241,64 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
     this.clock = new Clock();
   }
 
-  private generateForest() {
+  generateForest() {
     const loader = new FBXLoader();
-    for (let i = 0; i < 100; i++) {
-      const modelIndex = Math.floor(Math.random() * this.modelsFbx.length);
-      const modelPath = this.modelsFbx[modelIndex];
-      loader.load(modelPath, (fbx)  => {
-          const object = fbx;
-          object.position.set(Math.random() * 500 - 250, 0, Math.random() * 500 - 250); // Set initial position flat on the ground
+    for(let tree of this.modelsFbx){
+      loader.load(tree, (fbx) => {
+        const object = fbx;
+        object.scale.set(0.02, 0.02, 0.02); // Scale the model down
+        object.rotation.y = Math.PI / 4; // Rotate the model
+        // Extract geometry and material from the first Mesh found
+        let geometry: BufferGeometry | undefined;
+        let material: Material | Material[] = [];
 
-          // Access and manipulate model properties
-          object.scale.set(0.02, 0.02, 0.02); // Scale the model down
-          object.rotation.y = Math.PI / 4; // Rotate the model
-          this.scene.add(object);
-
-        // Traverse the object to ensure materials are correctly applied
-      /*  object.traverse((child: Object3D) => {
-          if (child['isMesh']) {
-            child['material'].needsUpdate = true;
-            if (child['material'].map) child['material'].map.needsUpdate = true;
+        object.traverse((child) => {
+          if ((child as Mesh).isMesh) {
+            const mesh = child as Mesh;
+            geometry = mesh.geometry;
+            material = mesh.material;
           }
         });
-*/
-          // Create and add physics body
-          const body = this.createPhysicsBody(object);
-          this.world.addBody(body);
-          object.userData['physicsBody'] = body;
+
+        const instanceCount = 100; // Number of instances
+        const instancedMesh = new InstancedMesh(geometry, material, instanceCount);
+
+        const dummy = new Object3D();
+        for (let i = 0; i < instanceCount; i++) {
+          dummy.scale.set(0.02, 0.02, 0.02); // Scale the model down
+          dummy.position.set(
+            Math.random() * 500 - 250,
+            0,
+            Math.random() * 500 - 250
+          );
+          dummy.rotation.set(
+            0,
+            Math.random() * 2 * Math.PI,
+            0
+          );
+          dummy.updateMatrix();
+          instancedMesh.setMatrixAt(i, dummy.matrix);
         }
-      );
-    }
 
-    for (let i = 0; i < 100; i++) {
-      const modelIndex = Math.floor(Math.random() * this.models.length);
-      const modelPath = this.models[modelIndex];
-
-      this.loader.load(modelPath, (gltf) => {
-        const object = gltf.scene;
-        object.position.set(Math.random() * 500 - 250, 0, Math.random() * 500 - 250); // Set initial position flat on the ground
-        this.scene.add(object);
-
-        // Create and add physics body
+        this.scene.add(instancedMesh);
+        // Create and add physics body for the base model (optional)
         const body = this.createPhysicsBody(object);
         this.world.addBody(body);
-
         object.userData['physicsBody'] = body;
-      }, () => {
-      }, (error) => {
-        console.error('An error happened', error);
-      });
+      })
+
     }
+
+;
   }
+
   private addFog() {
     // Add fog to the scene
     this.scene.fog = new Fog(0xaaaaaa, 10, 200); // Color, near, far
 
     // Load fog texture
     const loader = new TextureLoader();
-    const fogTexture = loader.load('path/to/fog_texture.png'); // Ensure this path points to a valid texture file
+    const fogTexture = loader.load('assets/textures/fog_texture_1.eps'); // Ensure this path points to a valid texture file
 
     // Create a plane geometry for the fog
     const fogGeometry = new PlaneGeometry(1000, 1000); // Adjust size as needed
@@ -300,7 +307,7 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
     const fogMaterial = new MeshBasicMaterial({
       map: fogTexture,
       transparent: true,
-      opacity: 0.5, // Adjust the opacity for desired fog density
+      opacity: 1, // Adjust the opacity for desired fog density
       depthWrite: false // Ensure the fog doesn't obscure other objects
     });
 
