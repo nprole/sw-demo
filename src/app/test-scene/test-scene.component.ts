@@ -31,9 +31,9 @@ import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 import {CharacterControls} from './characterControls'; // Adjust the path as necessary
 import {UtilsService} from './utils.service';
 import {Body, Box, Vec3, World} from 'cannon-es';
-import {RGBELoader} from "three/examples/jsm/loaders/RGBELoader";
+import {RGBELoader} from "three/examples/jsm/loaders/RGBELoader.js";
 import {GUI} from 'dat.gui';
-import {FBXLoader} from "three/examples/jsm/loaders/FBXLoader";
+import {FBXLoader} from "three/examples/jsm/loaders/FBXLoader.js";
 
 @Component({
   selector: 'app-test-scene',
@@ -82,6 +82,8 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
     'assets/models/trees/Fbx/Tree_Tropic_020.fbx',
     'assets/models/animals/deer1.fbx',
   ];
+
+  monsterTextures: any;
 
   private loader = new GLTFLoader(this.loadingManger);
 
@@ -190,21 +192,37 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
     const loadingManager = new LoadingManager();
     const gltfLoader = new GLTFLoader(loadingManager);
     // Create an FBXLoader
-
+    const textureLoader = new TextureLoader();
+    const texture = textureLoader.load('assets/models/trees/Textures/T_Tree_tropical.png');
+    this.monsterTextures = {
+      ao: textureLoader.load('assets/models/forest-monster/textures/forest-monster-AO.png'),
+        skin1: textureLoader.load('assets/models/forest-monster/textures/forest-monster-skin1.png'),
+      spec: textureLoader.load('assets/models/forest-monster/textures/tree-spec.png'),
+      norm: textureLoader.load('assets/models/forest-monster/textures/forest-monster-norm.png'),
+      spec2: textureLoader.load('assets/models/forest-monster/textures/forest-monster-spec.png'),
+      skin: textureLoader.load('assets/models/forest-monster/textures/forest-monster-skin.png'),
+      tree: textureLoader.load('assets/models/forest-monster/textures/tree.png'),
+      treeNorm: textureLoader.load('assets/models/forest-monster/textures/tree-norm.png')
+    };
     gltfLoader.load('assets/models/forest-monster-final.glb', (gltf): void => {
       const model = gltf.scene;
-
       /*  const boxHelper = new BoxHelper(model);
         model.add(boxHelper);
         model.scale.set(0.1, 0.1, 0.1);
         */
       model.scale.set(0.1, 0.1, 0.1);
-
       // GUI setup
       const gui = new GUI();
       //const characterFolder = gui.addFolder('Character');
 
       model.traverse((object) => {
+        const material = (object as Mesh).material;
+
+    //    material.aoMap = this.monsterTextures.ao;
+     //   material.map = this.monsterTextures.skin1; // Example texture assignment
+    //    material.specularMap = this.monsterTextures.spec;
+   //     material.normalMap = this.monsterTextures.norm;
+
         if ((object as Mesh).isMesh) (object as Mesh).castShadow = true;
       });
 
@@ -267,7 +285,7 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
           }
         });
 
-        const instanceCount = 100; // Number of instances
+        const instanceCount = 250; // Number of instances
         const instancedMesh = new InstancedMesh(geometry, material, instanceCount);
 
         const dummy = new Object3D();
@@ -276,16 +294,15 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
         }
         for (let i = 0; i < instanceCount; i++) {
           dummy.position.set(
-            Math.random() * 500 - 250,
+            Math.random() * 1000 - 500,
             0,
-            Math.random() * 500 - 250
+            Math.random() * 1000 - 500
           );
           dummy.rotation.set(
             0,
             Math.random() * 2 * Math.PI,
             0
           );
-          dummy.updateMatrix();
           instancedMesh.setMatrixAt(i, dummy.matrix);
         }
 
@@ -294,11 +311,8 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
         const body = this.createPhysicsBody(object);
         this.world.addBody(body);
         object.userData['physicsBody'] = body;
-      })
-
+      });
     }
-
-;
   }
 
   private addFog() {
@@ -418,8 +432,8 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
     const sandHeightMap = textureLoader.load('assets/textures/grass/tilable-IMG_0044-dark.png');
     const sandAmbientOcclusion = textureLoader.load('assets/textures/grass/tilable-IMG_0044-lush.png');
 
-    const WIDTH = 500;
-    const LENGTH = 500;
+    const WIDTH = 1000;
+    const LENGTH = 1000;
 
     const geometry = new PlaneGeometry(WIDTH, LENGTH, 512, 512);
     const material = new MeshStandardMaterial({

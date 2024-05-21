@@ -18,15 +18,8 @@ import {
   WebGLRenderer
 } from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
-import {ParametricGeometries} from "three/examples/jsm/geometries/ParametricGeometries";
-import SphereGeometry = ParametricGeometries.SphereGeometry;
-/*
-import {FontLoader} from "three/examples/jsm/loaders/FontLoader.js";
-import {TextGeometry} from "three/examples/jsm/geometries/TextGeometry.js";
-import {ParametricGeometries} from "three/examples/jsm/geometries/ParametricGeometries.js";
-import SphereGeometry = ParametricGeometries.SphereGeometry;
-import {TextGeometryParameters} from "three/examples/jsm/geometries/TextGeometry.js";
-*/
+import { ParametricGeometries } from 'three/examples/jsm/geometries/ParametricGeometries.js';
+const { SphereGeometry } = ParametricGeometries;
 
 class Ball {
   mesh!: Mesh;

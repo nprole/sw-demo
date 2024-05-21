@@ -13,9 +13,8 @@ import {
   Vector3,
   WebGLRenderer
 } from "three";
-import {ParametricGeometries} from "three/examples/jsm/geometries/ParametricGeometries";
-import SphereGeometry = ParametricGeometries.SphereGeometry;
-
+import { ParametricGeometries } from 'three/examples/jsm/geometries/ParametricGeometries.js';
+const { SphereGeometry } = ParametricGeometries;
 class Ball {
   mesh!: Mesh;
   velocity!: Vector3;
