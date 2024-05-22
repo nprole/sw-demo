@@ -35,7 +35,7 @@
 .icon {
   width: 120px; /* Adjust based on actual icon size */
   height: 120px; /* Adjust based on actual icon size */
-  background-image: url('../../assets/icons/img_1.png'); /* Path to your sprite sheet */
+  background-image: url('../../../assets/icons/img_1.png'); /* Path to your sprite sheet */
   background-repeat: no-repeat;
   background-size: 499px 493px; /* Adjust based on sprite sheet size */
 }

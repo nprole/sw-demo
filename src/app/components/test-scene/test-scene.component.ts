@@ -155,6 +155,8 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
         }*/
   }
 
+
+
   destroyUI() {
     if (this.healthBar && document.body.contains(this.healthBar)) {
       document.body.removeChild(this.healthBar);
@@ -218,8 +220,8 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
     // CONTROLS
     this.orbitControls = new OrbitControls(this.camera, this.renderer.domElement);
     this.orbitControls['enableDamping'] = true;
-    this.orbitControls['minDistance'] = 5;
-    this.orbitControls['maxDistance'] = 15;
+    this.orbitControls['minDistance'] = 20;
+    this.orbitControls['maxDistance'] = 70;
     this.orbitControls['enablePan'] = false;
     this.orbitControls['maxPolarAngle'] = Math.PI / 2 - 0.05;
     this.orbitControls.update();
@@ -261,7 +263,7 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
         model.add(boxHelper);
         model.scale.set(0.1, 0.1, 0.1);
         */
-      model.scale.set(0.1, 0.1, 0.1);
+      model.scale.set(0.2, 0.2, 0.2);
       // GUI setup
       const gui = new GUI();
       //const characterFolder = gui.addFolder('Character');
@@ -318,7 +320,7 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
         });
 
         if (geometry && material) {
-          const instanceCount = 100; // Number of instances
+          const instanceCount = 50; // Number of instances
           const instancedMesh = new InstancedMesh(geometry, material, instanceCount);
 
           const dummy = new Object3D();
@@ -335,7 +337,7 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
               0
             );
             // Set the scale for each instance
-            dummy.scale.set(0.02, 0.02, 0.02);
+            dummy.scale.set(0.04, 0.04, 0.04);
             dummy.updateMatrix();
             instancedMesh.setMatrixAt(i, dummy.matrix);
           }
@@ -549,6 +551,7 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.characterControls) {
       this.characterControls.update(mixerUpdateDelta, this.keysPressed);
     }
+
     this.orbitControls.update();
     this.renderer.render(this.scene, this.camera);
   }

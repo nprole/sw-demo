@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { TetrisSceneComponent } from './tetris-scene/tetris-scene.component';
-import { ThreeSceneComponent } from './three-scene/three-scene.component';
-import { SceneOverviewComponent } from './scene-overview/scene-overview.component';
-import {AboutComponent} from "./about/about.component";
-import {ChatGptShowcaseComponent} from "./chat-gpt-showcase/chat-gpt-showcase.component";
-import {BubbleSceneComponent} from "./bubble-scene/bubble-scene.component";
-import {OfficeSceneComponent} from "./office-scene/office-scene.component";
-import {TestSceneComponent} from "./test-scene/test-scene.component";
-import {LinksComponent} from "./links/links.component";
-import {GeneratedSpritesComponent} from "./generated-sprites/generated-sprites.component";
+import { TetrisSceneComponent } from './components/tetris-scene/tetris-scene.component';
+import { ThreeSceneComponent } from './components/three-scene/three-scene.component';
+import { SceneOverviewComponent } from './components/scene-overview/scene-overview.component';
+import {AboutComponent} from "./components/about/about.component";
+import {ChatGptShowcaseComponent} from "./components/chat-gpt-showcase/chat-gpt-showcase.component";
+import {BubbleSceneComponent} from "./components/bubble-scene/bubble-scene.component";
+import {OfficeSceneComponent} from "./components/office-scene/office-scene.component";
+import {TestSceneComponent} from "./components/test-scene/test-scene.component";
+import {LinksComponent} from "./components/links/links.component";
+import {GeneratedSpritesComponent} from "./components/generated-sprites/generated-sprites.component";
 
 // PRO TIP
 export const routes: Routes = [

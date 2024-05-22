@@ -15,7 +15,7 @@ export class UtilsService {
   map: Map<string, HTMLDivElement> = new Map();
 
   constructor() {
- /*   const w: HTMLDivElement = document.createElement('div');
+    const w: HTMLDivElement = document.createElement('div');
     const a: HTMLDivElement = document.createElement('div');
     const s: HTMLDivElement = document.createElement('div');
     const d: HTMLDivElement = document.createElement('div');
@@ -39,7 +39,7 @@ export class UtilsService {
 
     this.map.forEach((v, _) => {
       document.body.append(v);
-    });*/
+    });
   }
 
   public updatePosition(): void {

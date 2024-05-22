@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {Router, RouterModule, RouterOutlet} from '@angular/router';
-import {ThreeSceneComponent} from "./three-scene/three-scene.component";
-import {TetrisSceneComponent} from "./tetris-scene/tetris-scene.component";
+import {ThreeSceneComponent} from "./components/three-scene/three-scene.component";
+import {TetrisSceneComponent} from "./components/tetris-scene/tetris-scene.component";
 
 @Component({
   selector: 'app-root',
