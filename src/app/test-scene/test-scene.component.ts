@@ -52,16 +52,17 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
   private clock!: Clock;
   private keysPressed: any;
   private player: any;
-  monsterTextures: any;
-  loadingManager: LoadingManager;
-  gltfLoader: GLTFLoader;
-  fbxLoader: FBXLoader;
-  healthBar!: HTMLDivElement | null;
-  manaBar!: HTMLDivElement | null;
-  coinCount!: HTMLDivElement | null;
+  private monsterTextures: any;
+  private loadingManager: LoadingManager;
+  private gltfLoader: GLTFLoader;
+  private fbxLoader: FBXLoader;
+  private healthBar!: HTMLDivElement | null;
+  private manaBar!: HTMLDivElement | null;
+  private coinCount!: HTMLDivElement | null;
   private models: string[];
   private modelsFbx: string[];
   private animateFrameId: number | undefined;
+  private textureLoader: TextureLoader;
 
   constructor(private elRef: ElementRef, private utilsService: UtilsService) {
     this.player = null;
@@ -71,6 +72,7 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
     this.loadingManager = new LoadingManager();
     this.gltfLoader = new GLTFLoader(this.loadingManager);
     this.fbxLoader = new FBXLoader(this.loadingManager);
+    this.textureLoader = new TextureLoader(this.loadingManager);
 
     this.models = [
       'assets/models/rock-001.glb',
@@ -133,11 +135,11 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
         const mesh = object as Mesh;
         mesh.geometry.dispose();
         if (Array.isArray(mesh.material)) {
-          console.log('Makni masheve');
           mesh.material.forEach((material) => material.dispose());
         } else {
-          console.log('Nije Array');
-          //  mesh.material.dispose();
+          if (mesh.material instanceof Material){
+            mesh.material.dispose();
+          }
         }
       }
     });
@@ -231,17 +233,15 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // Load model
     // Create an FBXLoader
-    const textureLoader = new TextureLoader();
-    const texture = textureLoader.load('assets/models/trees/Textures/T_Tree_tropical.png');
     this.monsterTextures = {
-      ao: textureLoader.load('assets/models/forest-monster/textures/forest-monster-AO.png'),
-      skin1: textureLoader.load('assets/models/forest-monster/textures/forest-monster-skin1.png'),
-      spec: textureLoader.load('assets/models/forest-monster/textures/tree-spec.png'),
-      norm: textureLoader.load('assets/models/forest-monster/textures/forest-monster-norm.png'),
-      spec2: textureLoader.load('assets/models/forest-monster/textures/forest-monster-spec.png'),
-      skin: textureLoader.load('assets/models/forest-monster/textures/forest-monster-skin.png'),
-      tree: textureLoader.load('assets/models/forest-monster/textures/tree.png'),
-      treeNorm: textureLoader.load('assets/models/forest-monster/textures/tree-norm.png')
+      ao: this.textureLoader.load('assets/models/forest-monster/textures/forest-monster-AO.png'),
+      skin1: this.textureLoader.load('assets/models/forest-monster/textures/forest-monster-skin1.png'),
+      spec: this.textureLoader.load('assets/models/forest-monster/textures/tree-spec.png'),
+      norm: this.textureLoader.load('assets/models/forest-monster/textures/forest-monster-norm.png'),
+      spec2: this.textureLoader.load('assets/models/forest-monster/textures/forest-monster-spec.png'),
+      skin: this.textureLoader.load('assets/models/forest-monster/textures/forest-monster-skin.png'),
+      tree: this.textureLoader.load('assets/models/forest-monster/textures/tree.png'),
+      treeNorm: this.textureLoader.load('assets/models/forest-monster/textures/tree-norm.png')
     };
     this.generateForestMonster();
     this.generateForest();
@@ -308,12 +308,12 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
         // Extract geometry and material from the first Mesh found
         let geometry: BufferGeometry | undefined;
         let material: Material | Material[] = [];
-
+        const texture = this.textureLoader.load('assets/models/trees/Textures/T_Tree_tropical.png');
         fbx.traverse((child) => {
           if ((child as Mesh).isMesh) {
             const mesh = child as Mesh;
             geometry = mesh.geometry;
-            material = mesh.material;
+            material = new MeshStandardMaterial({ map: texture });;
           }
         });
 
@@ -323,6 +323,7 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
 
           const dummy = new Object3D();
           for (let i = 0; i < instanceCount; i++) {
+            this.addPhysicsBody(dummy)
             dummy.position.set(
               Math.random() * 500 - 250,
               0,
@@ -349,9 +350,9 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
           console.error('Failed to extract geometry or material from FBX model.');
         }
       }, () => {
-        console.log('onProgress');
+       // console.log('onProgress');
       }, () => {
-        console.log('onError');
+       // console.log('onError');
       });
     }
   }
@@ -416,7 +417,7 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  PhysicsBody(object: Object3D): Body {
+  private addPhysicsBody(object: Object3D): Body {
     // Get the bounding box of the object
     const box = new Box3().setFromObject(object);
     const size = new Vector3();
@@ -458,7 +459,7 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
 
       if (mainBox.intersectsBox(otherBox)) {
         // Handle collision
-        console.log('Collision detected with model:', otherModels[i]);
+      //  console.log('Collision detected with model:', otherModels[i]);
         return true;
       }
     }
@@ -536,21 +537,13 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
     this.world.step(1 / 60);
 
 // Update the position of the Three.js objects to match the physics bodies
-    /*
         this.scene.children.forEach((object) => {
           //   console.log('Log' , object);
-          /!*     if (this.checkCollision(mainModel, otherModels)) {
+/*               if (this.checkCollision(mainModel, otherModels)) {
                  // Reverse movement or stop the main model from moving through other models
                  undoMoveMainModel();
-               }*!/
-          /!*if (object.userData['physicsBody']) {
-            const body = object.userData['physicsBody'];
-            object.position.set(body.position.x, body.position.y, body.position.z);
-            object.quaternion.set(body.quaternion.x, body.quaternion.y, body.quaternion.z, body.quaternion.w);
-          }*!/
+               }*/
         });
-    */
-
 
     const mixerUpdateDelta = this.clock.getDelta();
     if (this.characterControls) {
