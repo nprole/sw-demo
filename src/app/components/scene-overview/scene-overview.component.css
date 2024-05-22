@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap');
 
 
-/*
 
 .container {
   text-align: center;
@@ -30,7 +29,6 @@ button {
 .description p {
   font-size: 18px;
 }
-*/
 
 /* scene-overview.component.css */
 #container {
@@ -46,6 +44,7 @@ button {
   font-size: 1rem;
   line-height: 1.5;
   white-space: pre;
+  color: var(--green-color-5);
 }
 /*
 

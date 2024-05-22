@@ -1,34 +1,38 @@
 /* You can add global styles to this file, and also import other style files */
 
+:root {
+  --green-color-1: rgb(81, 191, 39);
+  --green-color-2: rgb(166, 233, 25);
+  --green-color-3: rgb(36, 217, 168);
+  --green-color-4: rgb(32, 132, 107);
+  --green-color-5: rgb(25, 60, 50);
+  --green-color-6: rgb(234, 241, 238);
+  --green-color-7: rgb(0, 8, 11);
+}
 
 .green-color-1 {
-  background-color: rgb(81, 191, 39);
+  background-color: var(--green-color-1);
 }
 
 .green-color-2 {
-  background-color: rgb(166, 233, 25);
+  background-color: var(--green-color-2);
 }
 
 .green-color-3 {
-  background-color: rgb(36, 217, 168);
+  background-color: var(--green-color-3);
 }
 
 .green-color-4 {
-  background-color: rgb(32, 132, 107);
+  background-color: var(--green-color-4);
 }
 
 .green-color-5 {
-  background-color: rgb(25, 60, 50);
+  background-color: var(--green-color-5);
 }
 
-.green-color-6 {
-  background-color: rgb(234, 241, 238);
+.green-main {
+  color: var(--green-color-1);
 }
-
-.green-color-7 {
-  background-color: rgb(0, 8, 11);
-}
-
 
 
 app-root {

@@ -167,6 +167,8 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.coinCount && document.body.contains(this.coinCount)) {
       document.body.removeChild(this.coinCount);
     }
+
+    this.utilsService.destroyUI();
   }
 
   initUI() {

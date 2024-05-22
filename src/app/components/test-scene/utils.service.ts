@@ -67,4 +67,10 @@ export class UtilsService {
       this.map.get(key.toLowerCase())!.style.color = 'blue';
     }
   }
+
+  destroyUI(){
+    this.map.forEach((v, k) => {
+      v.remove();
+    });
+  }
 }
