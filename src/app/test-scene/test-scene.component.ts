@@ -42,74 +42,115 @@ import {FBXLoader} from "three/examples/jsm/loaders/FBXLoader.js";
   styleUrls: ['./test-scene.component.css']
 })
 export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
+
   private scene!: Scene;
   private camera!: PerspectiveCamera;
+  private world!: World;
   private renderer!: WebGLRenderer;
   private orbitControls!: OrbitControls;
   private characterControls!: CharacterControls;
   private clock!: Clock;
-  private keysPressed!: any;
+  private keysPressed: any;
   private player: any;
-  loadingManger: LoadingManager = new LoadingManager();
+  monsterTextures: any;
+  loadingManager: LoadingManager;
+  gltfLoader: GLTFLoader;
+  fbxLoader: FBXLoader;
   healthBar!: HTMLDivElement | null;
   manaBar!: HTMLDivElement | null;
   coinCount!: HTMLDivElement | null;
-  private models = ['assets/models/rock-001.glb',
-    'assets/models/tree-002.glb',
-    'assets/models/trunk-001.glb',
-    'assets/models/trunk-002.glb',
-    'assets/models/low-poly-tree.glb'];
-  private modelsFbx = [
-    'assets/models/trees/Fbx/Tree_Tropic_001.fbx',
-    'assets/models/trees/Fbx/Tree_Tropic_002.fbx',
-    'assets/models/trees/Fbx/Tree_Tropic_003.fbx',
-    'assets/models/trees/Fbx/Tree_Tropic_004.fbx',
-    'assets/models/trees/Fbx/Tree_Tropic_005.fbx',
-    'assets/models/trees/Fbx/Tree_Tropic_006.fbx',
-    'assets/models/trees/Fbx/Tree_Tropic_007.fbx',
-    'assets/models/trees/Fbx/Tree_Tropic_008.fbx',
-    'assets/models/trees/Fbx/Tree_Tropic_009.fbx',
-    'assets/models/trees/Fbx/Tree_Tropic_010.fbx',
-    'assets/models/trees/Fbx/Tree_Tropic_011.fbx',
-    'assets/models/trees/Fbx/Tree_Tropic_012.fbx',
-    'assets/models/trees/Fbx/Tree_Tropic_013.fbx',
-    'assets/models/trees/Fbx/Tree_Tropic_014.fbx',
-    'assets/models/trees/Fbx/Tree_Tropic_015.fbx',
-    'assets/models/trees/Fbx/Tree_Tropic_016.fbx',
-    'assets/models/trees/Fbx/Tree_Tropic_017.fbx',
-    'assets/models/trees/Fbx/Tree_Tropic_018.fbx',
-    'assets/models/trees/Fbx/Tree_Tropic_019.fbx',
-    'assets/models/trees/Fbx/Tree_Tropic_020.fbx',
-    'assets/models/animals/deer1.fbx',
-  ];
-
-  monsterTextures: any;
-
-  private loader = new GLTFLoader(this.loadingManger);
-
-  // Create the Cannon.js world
-  private world!: World;
+  private models: string[];
+  private modelsFbx: string[];
+  private animateFrameId: number | undefined;
 
   constructor(private elRef: ElementRef, private utilsService: UtilsService) {
-  }
-
-  ngOnInit(): void {
     this.player = null;
     this.world = new World();
     this.world.gravity.set(0, -9.82, 0); // Set gravity
     this.keysPressed = {};
+    this.loadingManager = new LoadingManager();
+    this.gltfLoader = new GLTFLoader(this.loadingManager);
+    this.fbxLoader = new FBXLoader(this.loadingManager);
 
-  }
-
-  ngAfterViewInit(): void {
+    this.models = [
+      'assets/models/rock-001.glb',
+      'assets/models/tree-002.glb',
+      'assets/models/trunk-001.glb',
+      'assets/models/trunk-002.glb',
+      'assets/models/low-poly-tree.glb'
+    ];
+    this.modelsFbx = [
+      'assets/models/trees/Fbx/Tree_Tropic_001.fbx',
+      'assets/models/trees/Fbx/Tree_Tropic_002.fbx',
+      'assets/models/trees/Fbx/Tree_Tropic_003.fbx',
+      'assets/models/trees/Fbx/Tree_Tropic_004.fbx',
+      'assets/models/trees/Fbx/Tree_Tropic_005.fbx',
+      'assets/models/trees/Fbx/Tree_Tropic_006.fbx',
+      'assets/models/trees/Fbx/Tree_Tropic_007.fbx',
+      'assets/models/trees/Fbx/Tree_Tropic_008.fbx',
+      'assets/models/trees/Fbx/Tree_Tropic_009.fbx',
+      'assets/models/trees/Fbx/Tree_Tropic_010.fbx',
+      'assets/models/trees/Fbx/Tree_Tropic_011.fbx',
+      'assets/models/trees/Fbx/Tree_Tropic_012.fbx',
+      'assets/models/trees/Fbx/Tree_Tropic_013.fbx',
+      'assets/models/trees/Fbx/Tree_Tropic_014.fbx',
+      'assets/models/trees/Fbx/Tree_Tropic_015.fbx',
+      'assets/models/trees/Fbx/Tree_Tropic_016.fbx',
+      'assets/models/trees/Fbx/Tree_Tropic_017.fbx',
+      'assets/models/trees/Fbx/Tree_Tropic_018.fbx',
+      'assets/models/trees/Fbx/Tree_Tropic_019.fbx',
+      'assets/models/trees/Fbx/Tree_Tropic_020.fbx'
+    ];
+    this.player = null;
+    this.world = new World();
+    this.world.gravity.set(0, -9.82, 0); // Set gravity
+    this.keysPressed = {};
     this.initUI();
     this.initScene();
     this.addFog();
     this.animate();
   }
 
+  ngOnInit(): void {
+
+  }
+
+  ngAfterViewInit(): void {
+
+  }
+
   ngOnDestroy(): void {
     this.destroyUI();
+
+    // Remove event listeners
+    document.removeEventListener('keydown', this.onKeyDown, false);
+    document.removeEventListener('keyup', this.onKeyUp, false);
+
+
+    // Dispose of Three.js objects and renderer
+    this.scene.traverse((object: Object3D) => {
+      if ((object as Mesh).isMesh) {
+        const mesh = object as Mesh;
+        mesh.geometry.dispose();
+        if (Array.isArray(mesh.material)) {
+          console.log('Makni masheve');
+          mesh.material.forEach((material) => material.dispose());
+        } else {
+          console.log('Nije Array');
+          //  mesh.material.dispose();
+        }
+      }
+    });
+
+
+    if (this.renderer) {
+      this.renderer.dispose();
+    }
+
+    /*    // Cancel animation frame
+        if (this.animateFrameId) {
+          cancelAnimationFrame(this.animateFrameId);
+        }*/
   }
 
   destroyUI() {
@@ -189,14 +230,12 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
     this.generateFloor();
 
     // Load model
-    const loadingManager = new LoadingManager();
-    const gltfLoader = new GLTFLoader(loadingManager);
     // Create an FBXLoader
     const textureLoader = new TextureLoader();
     const texture = textureLoader.load('assets/models/trees/Textures/T_Tree_tropical.png');
     this.monsterTextures = {
       ao: textureLoader.load('assets/models/forest-monster/textures/forest-monster-AO.png'),
-        skin1: textureLoader.load('assets/models/forest-monster/textures/forest-monster-skin1.png'),
+      skin1: textureLoader.load('assets/models/forest-monster/textures/forest-monster-skin1.png'),
       spec: textureLoader.load('assets/models/forest-monster/textures/tree-spec.png'),
       norm: textureLoader.load('assets/models/forest-monster/textures/forest-monster-norm.png'),
       spec2: textureLoader.load('assets/models/forest-monster/textures/forest-monster-spec.png'),
@@ -204,7 +243,19 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
       tree: textureLoader.load('assets/models/forest-monster/textures/tree.png'),
       treeNorm: textureLoader.load('assets/models/forest-monster/textures/tree-norm.png')
     };
-    gltfLoader.load('assets/models/forest-monster-final.glb', (gltf): void => {
+    this.generateForestMonster();
+    this.generateForest();
+
+    // CONTROL KEYS
+    document.addEventListener('keydown', (event) => this.onKeyDown(event), false);
+    document.addEventListener('keyup', (event) => this.onKeyUp(event), false);
+
+    // CLOCK
+    this.clock = new Clock();
+  }
+
+  generateForestMonster() {
+    this.gltfLoader.load('assets/models/forest-monster-final.glb', (gltf): void => {
       const model = gltf.scene;
       /*  const boxHelper = new BoxHelper(model);
         model.add(boxHelper);
@@ -218,10 +269,10 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
       model.traverse((object) => {
         const material = (object as Mesh).material;
 
-    //    material.aoMap = this.monsterTextures.ao;
-     //   material.map = this.monsterTextures.skin1; // Example texture assignment
-    //    material.specularMap = this.monsterTextures.spec;
-   //     material.normalMap = this.monsterTextures.norm;
+        //    material.aoMap = this.monsterTextures.ao;
+        //   material.map = this.monsterTextures.skin1; // Example texture assignment
+        //    material.specularMap = this.monsterTextures.spec;
+        //     material.normalMap = this.monsterTextures.norm;
 
         if ((object as Mesh).isMesh) (object as Mesh).castShadow = true;
       });
@@ -249,35 +300,16 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
       this.characterControls = new CharacterControls(model, mixer, animationsMap, this.orbitControls, this.camera, 'Idle');
     });
 
-    this.generateForest();
-
-    // CONTROL KEYS
-    document.addEventListener('keydown', (event) => this.onKeyDown(event), false);
-    document.addEventListener('keyup', (event) => this.onKeyUp(event), false);
-
-    // CLOCK
-    this.clock = new Clock();
   }
 
   generateForest() {
-    const loader = new FBXLoader();
-    const textureLoader = new TextureLoader();
-    const texture = textureLoader.load('assets/models/trees/Textures/T_Tree_tropical.png');
-    for(let tree of this.modelsFbx){
-      loader.load(tree, (fbx) => {
-
-        const object = fbx;
-        object.scale.set(0.02, 0.02, 0.02); // Scale the model down
-        object.rotation.y = Math.PI / 4; // Rotate the model
+    for (let tree of this.modelsFbx) {
+      this.fbxLoader.load(tree, (fbx) => {
         // Extract geometry and material from the first Mesh found
         let geometry: BufferGeometry | undefined;
         let material: Material | Material[] = [];
 
-        object.traverse((child) => {
-          if ((child as Mesh).isMesh) {
-            const mesh = child as Mesh;
-            (mesh.material as MeshStandardMaterial).map = texture;
-          }
+        fbx.traverse((child) => {
           if ((child as Mesh).isMesh) {
             const mesh = child as Mesh;
             geometry = mesh.geometry;
@@ -285,32 +317,41 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
           }
         });
 
-        const instanceCount = 250; // Number of instances
-        const instancedMesh = new InstancedMesh(geometry, material, instanceCount);
+        if (geometry && material) {
+          const instanceCount = 100; // Number of instances
+          const instancedMesh = new InstancedMesh(geometry, material, instanceCount);
 
-        const dummy = new Object3D();
-        if(tree !== 'assets/models/animals/deer1.fbx'){
-          dummy.scale.set(0.02, 0.02, 0.02); // Scale the model down
-        }
-        for (let i = 0; i < instanceCount; i++) {
-          dummy.position.set(
-            Math.random() * 1000 - 500,
-            0,
-            Math.random() * 1000 - 500
-          );
-          dummy.rotation.set(
-            0,
-            Math.random() * 2 * Math.PI,
-            0
-          );
-          instancedMesh.setMatrixAt(i, dummy.matrix);
-        }
+          const dummy = new Object3D();
+          for (let i = 0; i < instanceCount; i++) {
+            dummy.position.set(
+              Math.random() * 500 - 250,
+              0,
+              Math.random() * 500 - 250
+            );
+            dummy.rotation.set(
+              0,
+              Math.random() * 2 * Math.PI,
+              0
+            );
+            // Set the scale for each instance
+            dummy.scale.set(0.02, 0.02, 0.02);
+            dummy.updateMatrix();
+            instancedMesh.setMatrixAt(i, dummy.matrix);
+          }
 
-        this.scene.add(instancedMesh);
-        // Create and add physics body for the base model (optional)
-        const body = this.createPhysicsBody(object);
-        this.world.addBody(body);
-        object.userData['physicsBody'] = body;
+          this.scene.add(instancedMesh);
+
+          // Create and add physics body for the base model (optional)
+          const body = this.createPhysicsBody(fbx);
+          this.world.addBody(body);
+          fbx.userData['physicsBody'] = body;
+        } else {
+          console.error('Failed to extract geometry or material from FBX model.');
+        }
+      }, () => {
+        console.log('onProgress');
+      }, () => {
+        console.log('onError');
       });
     }
   }
@@ -324,7 +365,7 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
     const fogTexture = loader.load('assets/textures/fog_texture_1.eps'); // Ensure this path points to a valid texture file
 
     // Create a plane geometry for the fog
-    const fogGeometry = new PlaneGeometry(1000, 1000); // Adjust size as needed
+    const fogGeometry = new PlaneGeometry(500, 500); // Adjust size as needed
 
     // Create a material for the fog plane with transparency
     const fogMaterial = new MeshBasicMaterial({
@@ -367,7 +408,7 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private addSkyTexture(): void {
-    const rgbeLoader = new RGBELoader();
+    const rgbeLoader = new RGBELoader(this.loadingManager);
     rgbeLoader.load('assets/textures/sky/sky.hdr', (texture) => {
       texture.mapping = EquirectangularReflectionMapping;
       this.scene.background = texture;
@@ -432,8 +473,8 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
     const sandHeightMap = textureLoader.load('assets/textures/grass/tilable-IMG_0044-dark.png');
     const sandAmbientOcclusion = textureLoader.load('assets/textures/grass/tilable-IMG_0044-lush.png');
 
-    const WIDTH = 1000;
-    const LENGTH = 1000;
+    const WIDTH = 500;
+    const LENGTH = 500;
 
     const geometry = new PlaneGeometry(WIDTH, LENGTH, 512, 512);
     const material = new MeshStandardMaterial({
@@ -495,20 +536,20 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
     this.world.step(1 / 60);
 
 // Update the position of the Three.js objects to match the physics bodies
-/*
-    this.scene.children.forEach((object) => {
-      //   console.log('Log' , object);
-      /!*     if (this.checkCollision(mainModel, otherModels)) {
-             // Reverse movement or stop the main model from moving through other models
-             undoMoveMainModel();
-           }*!/
-      /!*if (object.userData['physicsBody']) {
-        const body = object.userData['physicsBody'];
-        object.position.set(body.position.x, body.position.y, body.position.z);
-        object.quaternion.set(body.quaternion.x, body.quaternion.y, body.quaternion.z, body.quaternion.w);
-      }*!/
-    });
-*/
+    /*
+        this.scene.children.forEach((object) => {
+          //   console.log('Log' , object);
+          /!*     if (this.checkCollision(mainModel, otherModels)) {
+                 // Reverse movement or stop the main model from moving through other models
+                 undoMoveMainModel();
+               }*!/
+          /!*if (object.userData['physicsBody']) {
+            const body = object.userData['physicsBody'];
+            object.position.set(body.position.x, body.position.y, body.position.z);
+            object.quaternion.set(body.quaternion.x, body.quaternion.y, body.quaternion.z, body.quaternion.w);
+          }*!/
+        });
+    */
 
 
     const mixerUpdateDelta = this.clock.getDelta();
