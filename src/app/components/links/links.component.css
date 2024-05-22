@@ -1,7 +1,6 @@
 .card-body {
   display: block;
   max-height: 70vh; /* Adjust based on your design */
-  overflow-y: auto;
 }
 
 .links-container {

@@ -1,10 +1,10 @@
-<div class="card">
-  <div class="card-header">
+<div >
+  <div >
     <h1 class="text-center mb-4">Useful Links</h1>
   </div>
-  <div class="card-body">
+  <div >
     <div class="links-container">
-      <div *ngFor="let linkCategory of links" class="mb-5">
+      <div *ngFor="let linkCategory of links" class="mb-5 was-validated">
         <h2 class="text-center">{{ linkCategory.category }}</h2>
         <div class="list-group">
           <a *ngFor="let link of linkCategory.items" [href]="link.url" target="_blank" class="list-group-item list-group-item-action text-center d-flex align-items-center">

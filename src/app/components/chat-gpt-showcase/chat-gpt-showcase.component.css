@@ -7,6 +7,12 @@
   width: 100%; /* Or any other size */
   height: 100%; /* Or any other size */
   transition: transform 0.3s; /* For smooth transformations */
+  font-family: 'Fira Code', monospace;
+  color: #f8f8f2;
+  font-size: 1rem;
+  line-height: 1.5;
+  white-space: pre;
+  color: var(--green-color-5);
 }
 :root {
   --x: 100px;
