@@ -1,14 +1,14 @@
-<div >
-  <div >
+<div>
+  <div>
     <h1 class="text-center mb-4">Useful Links</h1>
   </div>
-  <div >
-    <div class="links-container">
-      <div *ngFor="let linkCategory of links" class="mb-5 was-validated">
+  <div>
+    <div class="d-flex row">
+      <div *ngFor="let linkCategory of links" class="mb-5 col-6">
         <h2 class="text-center">{{ linkCategory.category }}</h2>
-        <div class="list-group">
-          <a *ngFor="let link of linkCategory.items" [href]="link.url" target="_blank" class="list-group-item list-group-item-action text-center d-flex align-items-center">
-            <div class="icon me-3" [ngClass]="link.className"></div>
+        <div class="list-group d-flex flex-wrap" >
+          <a *ngFor="let link of linkCategory.items" [href]="link.url" target="_blank" class="list-group-item list-group-item-action text-center col-md-3 d-flex align-items-center">
+            <div class="icon me-3" [ngClass]="link.className" ></div>
             <div class="flex-grow-1">
               {{ link.name }}
               <small class="d-block">{{ link.description }}</small>

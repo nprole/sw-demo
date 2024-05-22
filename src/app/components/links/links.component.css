@@ -3,56 +3,34 @@
   max-height: 70vh; /* Adjust based on your design */
 }
 
-.links-container {
-  padding: 20px;
-}
-
-.list-group-item {
-  font-size: 1.2rem;
-  padding: 1rem 1rem 1rem 3rem;
-  background-color: #2a2a2a; /* Darker content background */
-  margin-bottom: 0.5rem;
-  border-radius: 0.25rem;
-  transition: background-color 0.3s ease;
-  display: flex;
-  align-items: center;
-  position: relative;
-  color: #ffffff; /* Light text color */
-}
-
-.list-group-item:hover {
-  background-color: #3a3a3a; /* Slightly lighter background on hover */
-  text-decoration: none;
-}
-
-.list-group-item small {
-  display: block;
-  margin-top: 0.5rem;
-  color: #b0b0b0; /* Light grey color for description */
+.links-container .list-group-item {
+  background-color: transparent;
+  flex: 0.5 0 21%; /* Adjust the flex-basis to control the width of columns */
+  margin: 0.5%;
 }
 
 .icon {
-  width: 120px; /* Adjust based on actual icon size */
-  height: 120px; /* Adjust based on actual icon size */
-  background-image: url('../../../assets/icons/img_1.png'); /* Path to your sprite sheet */
+  width: 140px; /* Adjust based on actual icon size */
+  height: 140px; /* Adjust based on actual icon size */
+  background-image: url('../../../assets/sprites/links/ex1.png'); /* Path to your sprite sheet */
   background-repeat: no-repeat;
   background-size: 499px 493px; /* Adjust based on sprite sheet size */
+  transform: scale(0.5); /* Scale down the icon */
 }
 
-/* Icon positions */
-.spline { background-position: 0px 0px; }
-.blender { background-position: -128px 0px; }
-.tiled { background-position: -249px 0px; }
-.phaser { background-position: -374px 0px; }
-.mixamo { background-position: 0px -128px; }
+.spline { background-position: -8px 12px; }
+.blender { background-position: -128px 12px; }
+.tiled { background-position: -249px 12px; }
+.phaser { background-position: -374px 12px; }
+.mixamo { background-position: 4px -128px; }
 .webgpu { background-position: -128px -128px; }
-.webgl { background-position: -256px -128px; }
+.webgl { background-position: -247px -128px; }
 .cannon { background-position: -384px -128px; }
-.angular { background-position: 0px -256px; }
-.angular-v17 { background-position: -128px -256px; }
+.angular { background-position: 4px -247px; }
+.angular-v17 { background-position: -128px -247px; }
 .threejs { background-position: -247px -249px; }
-.character-model { background-position: -384px -256px; }
-.awarded-apps { background-position: 0px -384px; }
+.character-model { background-position: -384px -247px; }
+.awarded-apps { background-position: 4px -384px; }
 .slot-machine { background-position: -128px -384px; }
-.chatgpt { background-position: -256px -384px; }
+.chatgpt { background-position: -247px -384px; }
 .blokadelabs { background-position: -384px -384px; }

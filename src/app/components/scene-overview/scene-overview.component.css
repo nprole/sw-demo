@@ -40,16 +40,14 @@ button {
   display: flex;
   justify-content: center;
   font-family: 'Fira Code', monospace;
-  color: #f8f8f2;
   font-size: 1rem;
   line-height: 1.5;
   white-space: pre;
   color: var(--green-color-5);
 }
-/*
 
 :host {
-  display: blocked;
+  display: block;
   width: 100%;
   height: 100%;
   position: absolute;
@@ -58,4 +56,3 @@ button {
   overflow: hidden;
 }
 
-*/

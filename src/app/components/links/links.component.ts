@@ -19,7 +19,9 @@ export class LinksComponent {
         { name: 'Mixamo', url: 'https://www.mixamo.com/#/?page=1&query=run', description: 'Online platform for 3D character animations', className: 'mixamo' },
         { name: 'WebGPU', url: 'https://www.w3.org/TR/webgpu/', description: 'Graphics API for web applications', className: 'webgpu' },
         { name: 'WebGL', url: 'https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API', description: 'JavaScript API for rendering 3D graphics', className: 'webgl' },
-        { name: 'cannon.js', url: 'https://www.npmjs.com/package/cannon', description: 'JavaScript physics engine', className: 'cannon' }
+        { name: 'cannon.js', url: 'https://www.npmjs.com/package/cannon', description: 'JavaScript physics engine', className: 'cannon' },
+        { name: 'FFMPEG', url: 'https://ffmpeg.org/download.html', description: 'Multimedia framework for video and audio processing', className: 'ffmpeg' },
+        { name: 'dat.gui', url: 'https://github.com/dataarts/dat.gui', description: 'Lightweight GUI for changing variables in JavaScript', className: 'datgui' }
       ]
     },
     {
@@ -57,13 +59,20 @@ export class LinksComponent {
         { name: 'Pixel Art Makers', url: 'https://pixelartmaker.com/gallery', description: 'Pixel art gallery and tools', className: 'pixelart' },
         { name: 'Game Art 2D', url: 'https://www.gameart2d.com/freebies.html', description: 'Free 2D game assets', className: 'gameart2d' },
         { name: 'Reiner\'s Tilesets', url: 'http://www.reinerstilesets.de/', description: 'Free tilesets for game development', className: 'reiners-tilesets' },
-        { name: 'SketchFab', url: 'https://sketchfab.com/', description: '3D model repository', className: 'sketchfab' }
+        { name: 'SketchFab', url: 'https://sketchfab.com/', description: '3D model repository', className: 'sketchfab' },
+        { name: 'PolyHaven', url: 'https://polyhaven.com/', description: 'Free 3D models, HDRs and textures', className: 'polyhaven' }
       ]
     },
     {
       category: 'Used Graphics', items: [
         { name: '30 Grass Textures (tilable)', url: 'https://opengameart.org/content/30-grass-textures-tilable', description: 'Collection of 30 tileable grass textures', className: 'grass-texture' },
-        { name: 'Forest Monster', url: 'https://opengameart.org/content/forest-monster', description: 'Forest monster character art', className: 'forest-monster' }
+        { name: 'Forest Monster', url: 'https://opengameart.org/content/forest-monster', description: 'Forest monster character art', className: 'forest-monster' },
+        { name: 'Lonely Road Afternoon Puresky', url: 'https://polyhaven.com/a/lonely_road_afternoon_puresky', description: 'HDR sky texture', className: 'lonely-road' }
+      ]
+    },
+    {
+      category: 'Example of WebDesign', items: [
+        { name: 'FFmpeg Builds', url: 'https://www.gyan.dev/ffmpeg/builds/', description: 'Example of web design using FFmpeg builds', className: 'ffmpeg-builds' }
       ]
     }
   ];

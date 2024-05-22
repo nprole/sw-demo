@@ -1,140 +1,231 @@
-
-    <div
-      class="text-mesh d-block"
-      [style.--x]="position.x + 'px'"
-      [style.--y]="position.y + 'px'"
-      [style.--z]="position.z + 'px'"
-    >
-      <div class="container">
-        <div class="header">
-          <h1  [style.color]="currentColor">Angular Presentation</h1>
-        </div>
-        <div class="capability">
-          <h3  [style.color]="currentColor">Introduction to Angular</h3>
-          <ul>
-            <li [style.color]="currentColor"> Angular is a platform and framework for building single-page client applications using HTML and TypeScript.</li>
-            <li [style.color]="currentColor"> It is developed and maintained by Google.</li>
-            <li [style.color]="currentColor"> Angular applications are built with components and services that are well-structured and reusable.</li>
-          </ul>
-        </div>
-        <div class="capability">
-          <h3  [style.color]="currentColor">New Features in Angular 17</h3>
-          <ul>
-            <li [style.color]="currentColor"> Improved Reactivity: Enhanced reactivity system with better performance and simpler APIs.</li>
-            <li [style.color]="currentColor"> Standalone Components: Easier component creation without the need for NgModules.</li>
-            <li [style.color]="currentColor"> ESM Build: Better support for native ECMAScript modules.</li>
-            <li [style.color]="currentColor"> Performance Optimizations: Various under-the-hood improvements for faster rendering and lower memory usage.</li>
-          </ul>
-        </div>
-        <div class="capability">
-          <h3  [style.color]="currentColor">Basic Logic in Angular</h3>
-          <ul>
-            <li [style.color]="currentColor"> Data Binding: Angular provides powerful data binding features like one-way and two-way binding.</li>
-            <li [style.color]="currentColor"> Dependency Injection: Services and components can be easily injected into other components to share data and functionality.</li>
-            <li [style.color]="currentColor"> Directives: Angular includes structural and attribute directives to manipulate the DOM efficiently.</li>
-            <li [style.color]="currentColor"> Routing: The Angular Router module enables navigation and lazy loading for modular application design.</li>
-          </ul>
-        </div>
-        <div class="capability">
-          <h3  [style.color]="currentColor">Why Choose Angular?</h3>
-          <ul>
-            <li [style.color]="currentColor"> Comprehensive Ecosystem: Angular includes everything you need to build large-scale applications, from state management to testing.</li>
-            <li [style.color]="currentColor"> Strong Community: Backed by Google and supported by a large community of developers and contributors.</li>
-            <li [style.color]="currentColor"> Consistent Updates: Regular updates and a clear roadmap ensure Angular stays modern and relevant.</li>
-            <li [style.color]="currentColor"> TypeScript: Built with TypeScript, which brings type safety and modern JavaScript features to your projects.</li>
-          </ul>
-        </div>
+<div class="d-flex justify-content-center align-items-center">
+  <div class="text-mesh d-block"
+       [style.--x]="position.x + 'px'"
+       [style.--y]="position.y + 'px'"
+       [style.--z]="position.z + 'px'"
+  >
+    <div class="container">
+      <div class="header">
+        <h1 [style.color]="currentColor">Exploring Angular's Capabilities</h1>
       </div>
-      <div class="container">
-        <div class="header">
-          <h1  [style.color]="currentColor">Three.js Capabilities</h1>
-        </div>
-        <div class="capability">
-          <h3  [style.color]="currentColor">Rendering</h3>
-          <ul>
-            <li [style.color]="currentColor"> High-quality graphics rendering in the browser using WebGL.</li>
-            <li [style.color]="currentColor"> Supports both 2D and 3D graphics.</li>
-          </ul>
-        </div>
-        <div class="capability">
-          <h3  [style.color]="currentColor">Animation</h3>
-          <ul>
-            <li [style.color]="currentColor"> Keyframe animations for smooth transitions.</li>
-            <li [style.color]="currentColor"> Physics-based animations for realistic movements.</li>
-          </ul>
-        </div>
-        <div class="capability">
-          <h3  [style.color]="currentColor">Textures and Materials</h3>
-          <ul>
-            <li [style.color]="currentColor"> Various materials including basic, lambert, phong, and physical.</li>
-            <li [style.color]="currentColor"> Support for texture mapping, bump maps, and normal maps.</li>
-          </ul>
-        </div>
-        <div class="capability">
-          <h3  [style.color]="currentColor">Lighting</h3>
-          <ul>
-            <li [style.color]="currentColor"> Multiple light types such as ambient, directional, and point lights.</li>
-            <li [style.color]="currentColor"> Real-time shadows for added depth and realism.</li>
-          </ul>
-        </div>
-        <div class="capability">
-          <h3  [style.color]="currentColor">Interactivity</h3>
-          <ul>
-            <li [style.color]="currentColor"> Event handling for user interactions.</li>
-            <li [style.color]="currentColor"> Raycasting for detecting object intersections.</li>
-          </ul>
-        </div>
+      <div class="capability">
+        <h3 [style.color]="currentColor">Introduction to Angular</h3>
+        <p>Discover the power of Angular, a robust platform and framework for building dynamic client applications.</p>
+        <ul>
+          <li [style.color]="currentColor">Angular is a comprehensive platform and framework designed for building
+            single-page client applications using HTML and TypeScript.
+          </li>
+          <li [style.color]="currentColor">Developed and maintained by Google, Angular provides a solid foundation for
+            creating modern web applications.
+          </li>
+          <li [style.color]="currentColor">Angular promotes a modular and reusable architecture, making it easy to build
+            and maintain complex applications with components and services.
+          </li>
+        </ul>
       </div>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
-      <div class="container">
-        <div class="header">
-          <h1  [style.color]="currentColor">ChatGPT-4 Capabilities</h1>
-        </div>
-        <div class="capability">
-          <h3  [style.color]="currentColor">Advanced Language Understanding</h3>
-          <ul>
-            <li [style.color]="currentColor"> Context Awareness: Understands context across multiple turns of conversation, making interactions more
-              coherent and contextually relevant.
-            </li>
-            <li [style.color]="currentColor"> Language Nuance: Handles idioms, jokes, and nuanced expressions more effectively.</li>
-          </ul>
-        </div>
-        <div class="capability">
-          <h3  [style.color]="currentColor">Programming Assistance</h3>
-          <ul>
-            <li [style.color]="currentColor"> Code Generation: Can generate code snippets, help with debugging, and explain code functionality.</li>
-            <li [style.color]="currentColor"> Documentation: Assists in writing technical documentation and providing detailed explanations of code.
-            </li>
-          </ul>
-        </div>
-        <div class="capability">
-          <h3  [style.color]="currentColor">Content Creation</h3>
-          <ul>
-            <li [style.color]="currentColor"> Writing Assistance: Helps with writing essays, articles, stories, and even poetry.</li>
-            <li [style.color]="currentColor"> Editing and Proofreading: Offers suggestions for improving grammar, style, and clarity in written text.
-            </li>
-          </ul>
-        </div>
-        <div class="capability">
-          <h3  [style.color]="currentColor">Knowledge and Information</h3>
-          <ul>
-            <li [style.color]="currentColor"> Information Retrieval: Provides information on a wide range of topics, from historical facts to scientific
-              concepts.
-            </li>
-            <li [style.color]="currentColor"> Learning Support: Assists with learning new topics by breaking down complex concepts into understandable
-              chunks.
-            </li>
-          </ul>
-        </div>
-        <div class="capability">
-          <h3  [style.color]="currentColor">Customization and Integration</h3>
-          <ul>
-            <li [style.color]="currentColor"> API Access: Can be integrated into various applications using OpenAI’s API, allowing for custom
-              implementations in different domains.
-            </li>
-            <li [style.color]="currentColor"> Custom Models: Supports fine-tuning on specific datasets to better serve specialized use cases.</li>
-          </ul>
-        </div>
+      <div class="capability">
+        <h3 [style.color]="currentColor">New Features in Angular 17</h3>
+        <p>Experience the latest enhancements and optimizations in Angular 17, setting new standards for web
+          development.</p>
+        <ul>
+          <li [style.color]="currentColor">Improved Reactivity: Angular 17 introduces an enhanced reactivity system with
+            improved performance and simpler APIs, enabling smoother user experiences.
+          </li>
+          <li [style.color]="currentColor">Standalone Components: Simplify component creation with Angular 17's support
+            for standalone components, eliminating the need for NgModules in certain scenarios.
+          </li>
+          <li [style.color]="currentColor">ESM Build: Angular 17 offers better support for native ECMAScript modules,
+            improving compatibility and performance.
+          </li>
+          <li [style.color]="currentColor">Performance Optimizations: Benefit from various under-the-hood improvements in
+            Angular 17, resulting in faster rendering and reduced memory usage for your applications.
+          </li>
+        </ul>
+      </div>
+      <div class="capability">
+        <h3 [style.color]="currentColor">Basic Logic in Angular</h3>
+        <p>Explore the fundamental building blocks of Angular and its powerful features for creating dynamic web
+          applications.</p>
+        <ul>
+          <li [style.color]="currentColor">Data Binding: Angular offers powerful data binding capabilities, including
+            one-way and two-way binding, to keep your UI in sync with your data model.
+          </li>
+          <li [style.color]="currentColor">Dependency Injection: Easily share data and functionality between components by
+            leveraging Angular's robust dependency injection system.
+          </li>
+          <li [style.color]="currentColor">Directives: Manipulate the DOM efficiently with Angular's built-in structural
+            and attribute directives, enabling dynamic content generation and manipulation.
+          </li>
+          <li [style.color]="currentColor">Routing: Take advantage of Angular's powerful Router module to implement
+            navigation and lazy loading for scalable and modular application design.
+          </li>
+        </ul>
+      </div>
+      <div class="capability">
+        <h3 [style.color]="currentColor">Why Choose Angular?</h3>
+        <p>Discover the unique advantages of Angular and how it compares to other frameworks and libraries in the modern
+          web development landscape.</p>
+        <ul>
+          <li [style.color]="currentColor">Comprehensive Ecosystem: Angular provides a comprehensive suite of tools and
+            libraries for building large-scale applications, including built-in support for state management and testing.
+          </li>
+          <li [style.color]="currentColor">Strong Community: Backed by Google and supported by a vibrant community of
+            developers and contributors, Angular offers extensive documentation, tutorials, and resources.
+          </li>
+          <li [style.color]="currentColor">Consistent Updates: Angular follows a regular release schedule and maintains a
+            clear roadmap, ensuring that developers have access to the latest features and improvements.
+          </li>
+          <li [style.color]="currentColor">TypeScript: Angular is built with TypeScript, bringing type safety and modern
+            JavaScript features to your projects, enhancing productivity and code quality.
+          </li>
+        </ul>
+      </div>
+      <div class="capability">
+        <h3 [style.color]="currentColor">Comparison with Other Technologies</h3>
+        <p>Compare Angular with other popular frameworks, libraries, and tools in the web development ecosystem.</p>
+        <ul>
+          <li [style.color]="currentColor">State Management: Unlike some other frameworks, Angular provides built-in
+            support for state management through services and observables, simplifying data management in complex
+            applications.
+          </li>
+          <li [style.color]="currentColor">Npm Integration: Angular seamlessly integrates with npm, the Node.js package
+            manager, allowing developers to easily install and manage third-party packages and dependencies.
+          </li>
+          <li [style.color]="currentColor">Nginx Deployment: Deploying Angular applications with Nginx offers high
+            performance and scalability, making it an ideal choice for serving Angular apps to a large audience.
+          </li>
+        </ul>
       </div>
     </div>
+
+    <div class="container">
+      <div class="header">
+        <h1 [style.color]="currentColor">Unlocking the Power of Three.js</h1>
+      </div>
+      <div class="capability">
+        <h3 [style.color]="currentColor">Rendering</h3>
+        <p>Experience stunning, high-fidelity graphics directly in your browser with Three.js powered by WebGL
+          technology.</p>
+        <ul>
+          <li [style.color]="currentColor">High-quality rendering for immersive 2D and breathtaking 3D graphics.</li>
+          <li [style.color]="currentColor">Real-time rendering for dynamic and responsive visualizations.</li>
+        </ul>
+      </div>
+      <div class="capability">
+        <h3 [style.color]="currentColor">Animation</h3>
+        <p>Breathe life into your scenes with captivating animations and lifelike movements.</p>
+        <ul>
+          <li [style.color]="currentColor">Effortlessly create smooth transitions and cinematic effects with keyframe
+            animations.
+          </li>
+          <li [style.color]="currentColor">Achieve realism with physics-based animations that simulate natural
+            movements.
+          </li>
+        </ul>
+      </div>
+      <div class="capability">
+        <h3 [style.color]="currentColor">Textures and Materials</h3>
+        <p>Elevate your visuals with a vast array of materials and textures.</p>
+        <ul>
+          <li [style.color]="currentColor">Choose from basic, lambert, phong, or physical materials to suit your design
+            needs.
+          </li>
+          <li [style.color]="currentColor">Enhance realism with texture mapping, bump maps, and normal maps for detailed
+            surfaces.
+          </li>
+        </ul>
+      </div>
+      <div class="capability">
+        <h3 [style.color]="currentColor">Lighting</h3>
+        <p>Illuminate your scenes and bring depth to your creations with advanced lighting techniques.</p>
+        <ul>
+          <li [style.color]="currentColor">Experiment with ambient, directional, and point lights to set the perfect
+            mood.
+          </li>
+          <li [style.color]="currentColor">Add depth and realism with real-time shadows that react dynamically to your
+            scene.
+          </li>
+        </ul>
+      </div>
+      <div class="capability">
+        <h3 [style.color]="currentColor">Interactivity</h3>
+        <p>Engage your audience and create interactive experiences with intuitive controls and object interactions.</p>
+        <ul>
+          <li [style.color]="currentColor">Harness the power of event handling to respond to user input and gestures.</li>
+          <li [style.color]="currentColor">Leverage raycasting to detect object intersections and enable precise
+            interactions.
+          </li>
+        </ul>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <div class="container">
+      <div class="header">
+        <h1 [style.color]="currentColor">Exploring the Power of ChatGPT-4</h1>
+      </div>
+      <div class="capability">
+        <h3 [style.color]="currentColor">Advanced Language Understanding</h3>
+        <p>Experience unparalleled depth in conversation with ChatGPT-4's advanced language processing capabilities.</p>
+        <ul>
+          <li [style.color]="currentColor">Context Awareness: Seamlessly understands context across multiple
+            conversational turns, ensuring coherent and contextually relevant responses.
+          </li>
+          <li [style.color]="currentColor">Language Nuance: Masterfully handles idioms, jokes, and nuanced expressions,
+            enriching interactions with human-like understanding.
+          </li>
+        </ul>
+      </div>
+      <div class="capability">
+        <h3 [style.color]="currentColor">Programming Assistance</h3>
+        <p>Empower your coding journey with ChatGPT-4's comprehensive programming support.</p>
+        <ul>
+          <li [style.color]="currentColor">Code Generation: Instantly generate code snippets, debug with ease, and receive
+            clear explanations of code functionality.
+          </li>
+          <li [style.color]="currentColor">Documentation: Simplify technical writing with detailed assistance in creating
+            documentation and explaining code intricacies.
+          </li>
+        </ul>
+      </div>
+      <div class="capability">
+        <h3 [style.color]="currentColor">Content Creation</h3>
+        <p>Unlock your creativity with ChatGPT-4's versatile content creation capabilities.</p>
+        <ul>
+          <li [style.color]="currentColor">Writing Assistance: Receive guidance and inspiration for crafting essays,
+            articles, stories, and even poetry.
+          </li>
+          <li [style.color]="currentColor">Editing and Proofreading: Elevate your writing with suggestions for enhancing
+            grammar, style, and clarity.
+          </li>
+        </ul>
+      </div>
+      <div class="capability">
+        <h3 [style.color]="currentColor">Knowledge and Information</h3>
+        <p>Expand your horizons with ChatGPT-4's vast knowledge base and informative insights.</p>
+        <ul>
+          <li [style.color]="currentColor">Information Retrieval: Access a wealth of information on diverse topics, from
+            historical facts to scientific concepts.
+          </li>
+          <li [style.color]="currentColor">Learning Support: Simplify complex concepts and accelerate learning with
+            personalized explanations and insights.
+          </li>
+        </ul>
+      </div>
+      <div class="capability">
+        <h3 [style.color]="currentColor">Customization and Integration</h3>
+        <p>Tailor ChatGPT-4 to your unique needs and seamlessly integrate it into your applications.</p>
+        <ul>
+          <li [style.color]="currentColor">API Access: Integrate ChatGPT-4 into various applications using OpenAI's API,
+            enabling custom implementations across different domains.
+          </li>
+          <li [style.color]="currentColor">Custom Models: Fine-tune ChatGPT-4 on specific datasets to address specialized
+            use cases and enhance performance.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+

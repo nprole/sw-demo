@@ -1,10 +1,9 @@
 .container {
-  width: 100%;
   height: 100%;
 }
 
 .text-mesh {
-  width: 100%; /* Or any other size */
+  width:50%;
   height: 100%; /* Or any other size */
   transition: transform 0.3s; /* For smooth transformations */
   font-family: 'Fira Code', monospace;

@@ -38,9 +38,9 @@ export class SceneOverviewComponent implements OnInit {
     { name: '4. ChatGPT 4o', route: '/chatgpt-4', description: 'Information about the ChatGPT 4o model and its features.' },
     { name: '1. Cube Example', route: '/scenes/cube-example', description: 'This example demonstrates a simple 3D rotating cube using Three.js.' },
     { name: '2. Tetris Scene', route: '/scenes/tetris-scene', description: 'This example showcases a Tetris game implemented with Angular and Three.js.' },
-    { name: '3. Office Scene', route: '/scenes/office', description: 'Office scene built from image uploaded, recorded with camera.' },
-    { name: '4. Bubble', route: '/scenes/bubble-scene', description: 'Bubble scene example.' },
-    { name: '5. 3D Model Animated', route: '/scenes/test-3d', description: '3D model animated example.' },
+    { name: '3. 2D Plane Scene', route: '/scenes/office', description: 'Office scene built from image uploaded, recorded with camera.' },
+    { name: '4. 3D Bubble Scene', route: '/scenes/bubble-scene', description: 'Bubble scene example.' },
+    { name: '5. 3D Model Scene', route: '/scenes/test-3d', description: '3D model animated example.' },
   ];
 
   constructor(private router: Router) {}
