@@ -10,7 +10,7 @@ import {
   Scene,
   WebGLRenderer
 } from "three";
-import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
+import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 
 
@@ -123,6 +123,7 @@ export class SceneOverviewComponent implements OnInit {
   }
 
   // Render the scene
+
   animate() {
     requestAnimationFrame(() => this.animate());
     this.camera.position.x += (this.mouseX * 10 - this.camera.position.x) * 0.05;

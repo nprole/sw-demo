@@ -117,7 +117,7 @@ h1, h2, h3 {
 .logo {
   width: 60px; /* Adjust based on actual icon size */
   height: 60px; /* Adjust based on actual icon size */
-  background-image: url('./assets/logo.png'); /* Path to your sprite sheet */
+  background-image: url('assets/logo.png'); /* Path to your sprite sheet */
   background-repeat: no-repeat;
   background-size: contain;
 }
@@ -125,7 +125,7 @@ h1, h2, h3 {
 .logo-big {
   width: 300px; /* Adjust based on actual icon size */
   height: 300px; /* Adjust based on actual icon size */
-  background-image: url('./assets/logo.png'); /* Path to your sprite sheet */
+  background-image: url('assets/logo.png'); /* Path to your sprite sheet */
   background-repeat: no-repeat;
   background-size: contain;
 }
