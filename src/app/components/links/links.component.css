@@ -1,36 +1,72 @@
-.card-body {
-  display: block;
-  max-height: 70vh; /* Adjust based on your design */
-}
-
-.links-container .list-group-item {
-  background-color: transparent;
-  flex: 0.5 0 21%; /* Adjust the flex-basis to control the width of columns */
-  margin: 0.5%;
+.content-wrapper {
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none;  /* For Internet Explorer and Edge */
+  overflow: scroll;
+  position: absolute;
+  font-family: 'Fira Code', monospace;
+  width: 1600px;
+  font-size: 1.5rem;
+  line-height: 1.5;
+  white-space: pre;
+  color: var(--green-color-2);
+  text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.5);
 }
 
 .icon {
-  width: 140px; /* Adjust based on actual icon size */
-  height: 140px; /* Adjust based on actual icon size */
-  background-image: url('../../../assets/sprites/links/ex1.png'); /* Path to your sprite sheet */
+  width: 140px;
+  height: 140px;
+  background-image: url('../../../assets/sprites/links/ex1.png');
   background-repeat: no-repeat;
-  background-size: 499px 493px; /* Adjust based on sprite sheet size */
-  transform: scale(0.5); /* Scale down the icon */
+  background-size: 499px 493px;
+  transform: scale(0.5);
+}
+.links-row {
+  display: flex;
+  transition: transform 0.4s ease-in-out;
 }
 
-.spline { background-position: -8px 12px; }
-.blender { background-position: -128px 12px; }
-.tiled { background-position: -249px 12px; }
-.phaser { background-position: -374px 12px; }
-.mixamo { background-position: 4px -128px; }
-.webgpu { background-position: -128px -128px; }
-.webgl { background-position: -247px -128px; }
-.cannon { background-position: -384px -128px; }
+.link-item {
+  min-width: 200px; /* Adjust based on your design */
+  margin: 0 10px;
+  text-align: center;
+}
+
+.nav-button {
+  position: relative;
+  height: 50px;
+  width: 50px;
+  display: flex;
+  color: white;
+  border-radius: 100%;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  user-select: none;
+  background-color: var(--green-color-5);
+}
+
+.left-button {
+  position: absolute;
+  left: 10px;
+}
+
+.right-button {
+  position: absolute;
+  right: 10px;
+}
+/* Icon specific classes */
+.spline { background-position: -2px 12px; }
+.blender { background-position: -178px 12px; }
+.tiled { background-position: -357px 12px; }
+
+.phaser { background-position: -356px 12px; }
+.mixamo { background-position: 1px -115px; }
+.webgpu { background-position: -176px -115px; }
+
 .angular { background-position: 4px -247px; }
-.angular-v17 { background-position: -128px -247px; }
-.threejs { background-position: -247px -249px; }
-.character-model { background-position: -384px -247px; }
-.awarded-apps { background-position: 4px -384px; }
-.slot-machine { background-position: -128px -384px; }
-.chatgpt { background-position: -247px -384px; }
-.blokadelabs { background-position: -384px -384px; }
+.webgl { background-position: -356px -115px; }
+.cannon { background-position: -384px -115px; }
+
+

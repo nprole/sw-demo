@@ -42,7 +42,6 @@ import {FBXLoader} from "three/examples/jsm/loaders/FBXLoader.js";
   styleUrls: ['./test-scene.component.css']
 })
 export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
-
   private scene!: Scene;
   private camera!: PerspectiveCamera;
   private world!: World;
