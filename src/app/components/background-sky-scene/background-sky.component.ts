@@ -7,7 +7,7 @@ import {
   EquirectangularReflectionMapping,
   LoadingManager,
   PerspectiveCamera,
-  Scene,
+  Scene, TextureLoader,
   WebGLRenderer
 } from "three";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
@@ -108,12 +108,10 @@ export class BackgroundSkyComponent implements OnInit {
   }
 
   private addSkyTexture(): void {
-    const rgbeLoader = new RGBELoader(this.loadingManager);
-    let textureName = 'assets/textures/sky/sky.hdr';
-    if(this.textureId !== 0){
-      textureName ='assets/textures/sky/moon.hdr'
-    }
-    rgbeLoader.load(textureName, (texture) => {
+    const textureName = this.textureId !== 0 ? 'assets/textures/sky/rainy.hdr' : 'assets/textures/sky/sky.hdr';
+    const loader = textureName.endsWith('.hdr') ? new RGBELoader(this.loadingManager) : new TextureLoader(this.loadingManager);
+
+    loader.load(textureName, (texture) => {
       texture.mapping = EquirectangularReflectionMapping;
       this.scene.background = texture;
       this.scene.environment = texture; // Optional: to use the texture for environment lighting
