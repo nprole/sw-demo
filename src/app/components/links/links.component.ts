@@ -2,6 +2,7 @@ import {Component, ElementRef, Input, ViewChild} from '@angular/core';
 import {CommonModule} from "@angular/common";
 import {Router, RouterModule} from "@angular/router";
 import {BackgroundSkyComponent} from "../background-sky-scene/background-sky.component";
+
 interface LinkItem {
   name: string;
   url: string;
@@ -13,6 +14,7 @@ interface LinkCategory {
   category: string;
   items: LinkItem[];
 }
+
 @Component({
   selector: 'app-links',
   standalone: true,
@@ -22,7 +24,7 @@ interface LinkCategory {
 })
 export class LinksComponent {
   @Input() fullHeight: boolean = true;
-  @ViewChild('contentWrapper', { static: false }) contentWrapper!: ElementRef;
+  @ViewChild('contentWrapper', {static: false}) contentWrapper!: ElementRef;
 
   public links: LinkCategory[] = [
     {
@@ -262,22 +264,22 @@ export class LinksComponent {
       ]
     }
   ];
-
-
-
-  constructor(
-    private router: Router
-  ) {
+  navigate(path: string) {
+    const url = encodeURI(path);
+    window.open(url, '_blank')
   }
 
-  navigate(path: string){
-    this.router.navigate([path]);
-  }
-  scrollLeft() {
-    this.contentWrapper.nativeElement.scrollBy({ left: -1000, behavior: 'smooth' });
+  scrollLeft(event: any) {
+    if (event) {
+      event.stopPropagation();
+    }
+    this.contentWrapper.nativeElement.scrollBy({left: -1000, behavior: 'smooth'});
   }
 
-  scrollRight() {
-    this.contentWrapper.nativeElement.scrollBy({ left: 1000, behavior: 'smooth' });
+  scrollRight(event: any) {
+    if (event) {
+      event.stopPropagation();
+    }
+    this.contentWrapper.nativeElement.scrollBy({left: 1000, behavior: 'smooth'});
   }
 }

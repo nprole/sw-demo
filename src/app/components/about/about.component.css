@@ -2,53 +2,28 @@
   width: 256px;
   height: 256px;
 }
-
-.card {
-  width: 80%;
-  max-width: 800px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow effect */
+.content{
+  width: 700px!important;
+  transition: transform 0.3s; /* For smooth transformations */
+  font-family: 'Fira Code', monospace;
+  font-size: 1rem;
+  line-height: 1.5;
+  white-space: pre;
+  color: var(--green-color-5);
+}
+h1 h2 h3 {
+  color: var(--green-color-5);
 }
 
-.card-header,
-.content-section {
-  padding: 20px;
+
+/* Ensure the main container does not exceed the viewport width */
+.max-wrapper {
+  max-width: 700px; /* Ensures the container does not exceed the viewport width */
+  overflow-x: hidden; /* Prevent horizontal overflow */
+
 }
 
-.card-header h2,
-.content-section h2 {
-  margin-top: 0;
+:host {
+  top: 50px
 }
 
-.card-body {
-  padding: 20px;
-}
-
-.logo {
-  width: 100px; /* Adjust the width of your logo */
-  height: 100px; /* Adjust the height of your logo */
-  margin: 0 auto; /* Center the logo horizontally */
-  border-radius: 50%; /* Make the logo circular */
-}
-
-.content-section p {
-  margin-bottom: 15px;
-}
-
-.content-section ul {
-  padding-left: 20px;
-}
-
-.content-section ul li {
-  list-style-type: disc;
-  margin-bottom: 5px;
-}
-
-a {
-  color: #007bff; /* Add your desired link color */
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}

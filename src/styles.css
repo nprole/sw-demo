@@ -5,7 +5,7 @@
   --green-color-2: rgb(166, 233, 25);
   --green-color-3: rgb(36, 217, 168);
   --green-color-4: rgb(32, 132, 107);
-  --green-color-5: rgb(25, 60, 50);
+  --green-color-5: rgb(255, 255, 255);
   --green-color-6: rgb(234, 241, 238);
   --green-color-7: rgb(0, 8, 11);
 }
@@ -50,9 +50,6 @@ app-root {
   min-height: 100vh;
 }
 
-footer {
-  height: 3vh;
-}
 
 .app-container {
   display: flex;
@@ -61,18 +58,12 @@ footer {
   height: 100%;
 }
 
-.card-header {
-  text-align: center;
-}
-
 /* Header */
 header {
-  background: #1c1c1c; /* Dark header background */
+  background:var(--green-color-3); /* Dark header background */
   color: #ffffff;
-  padding: 20px;
-  text-align: center;
-  font-size: 1.5rem;
-  font-weight: bold;
+  display: flex;
+  justify-content: center;
 }
 
 /* Main Content */
@@ -99,10 +90,8 @@ main {
 .content {
   flex: 1;
   padding: 20px;
-  background: #2a2a2a; /* Darker content background */
   border-radius: 10px;
   color: #ffffff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Darker shadow */
 }
 
 .card main {

@@ -260,18 +260,9 @@ export class TestSceneComponent implements OnInit, OnDestroy, AfterViewInit {
   generateForestMonster() {
     this.gltfLoader.load('assets/models/forest-monster-final.glb', (gltf): void => {
       const model = gltf.scene;
-      /*  const boxHelper = new BoxHelper(model);
-        model.add(boxHelper);
-        model.scale.set(0.1, 0.1, 0.1);
-        */
       model.scale.set(0.2, 0.2, 0.2);
-      // GUI setup
-      const gui = new GUI();
-      //const characterFolder = gui.addFolder('Character');
-
       model.traverse((object) => {
         const material = (object as Mesh).material;
-
         //    material.aoMap = this.monsterTextures.ao;
         //   material.map = this.monsterTextures.skin1; // Example texture assignment
         //    material.specularMap = this.monsterTextures.spec;

@@ -1,17 +1,6 @@
-import {Component, HostListener, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {CommonModule} from "@angular/common";
-import {
-  AmbientLight,
-  DirectionalLight,
-  EquirectangularReflectionMapping,
-  LoadingManager,
-  PerspectiveCamera,
-  Scene,
-  WebGLRenderer
-} from "three";
-import {RGBELoader} from "three/examples/jsm/loaders/RGBELoader.js";
-import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 import {BackgroundSkyComponent} from "../background-sky-scene/background-sky.component";
 
 

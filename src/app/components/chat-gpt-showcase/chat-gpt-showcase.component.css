@@ -1,7 +1,3 @@
-.container {
-  height: 100%;
-}
-
 .text-mesh {
   width:50%;
   height: 100%; /* Or any other size */
@@ -18,7 +14,6 @@
   --z: 0;
 }
 
-
 /* Define dynamic transformations */
 .transform-translate {
   transform: translate3d(var(--x), var(--y), var(--z));
@@ -28,6 +23,7 @@
   display: flex;
   align-items: center;
   flex-direction: column;
+  margin-bottom: 20px;
 }
 .capability {
   display: flex;
@@ -38,11 +34,4 @@
 .capability h3 {
   margin-bottom: 10px;
   color: #333;
-}
-.capability ul {
-  padding-left: 20px;
-  list-style-type: disc;
-}
-.capability ul li {
-  margin-bottom: 5px;
 }

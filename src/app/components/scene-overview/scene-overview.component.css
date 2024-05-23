@@ -33,6 +33,7 @@ button {
   width: 100%;
   overflow: hidden;
 }
+
 .content-wrapper {
   position: absolute;
   display: flex;

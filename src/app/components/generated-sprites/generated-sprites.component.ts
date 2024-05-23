@@ -47,12 +47,24 @@ export class GeneratedSpritesComponent implements OnInit, OnDestroy {
     'assets/logo/example_6.png',
     'assets/logo/example_7.png',
   ];
+
+  public prompts = [
+    'assets/sprites/prompts/example_1.png',
+    'assets/sprites/prompts/example_2.png',
+    'assets/sprites/prompts/example_3.png',
+    'assets/sprites/prompts/example_4.png',
+    'assets/sprites/prompts/example_5.png',
+    'assets/sprites/prompts/example_6.png',
+    'assets/sprites/prompts/example_7.png',
+  ];
   public currentSlide: number = 0;
   public currentLogoSlide: number = 0;
+  public currentPromptsSlide: number = 0;
   private intervalId: any;
   private intervalTime: number = 5000; // Change image every 3 seconds
 
-  constructor() {}
+  constructor() {
+  }
 
   ngOnInit(): void {
     this.startCarousel();
@@ -74,40 +86,51 @@ export class GeneratedSpritesComponent implements OnInit, OnDestroy {
       clearInterval(this.intervalId);
     }
   }
-//TODO odvratno
+
+// TODO odvratno
   next(carouselName: string): void {
-    if(carouselName === 'sprite') {
+    if (carouselName === 'sprite') {
       if (this.currentSlide < this.sprites.length - 1) {
         this.currentSlide++;
       } else {
         this.currentSlide = 0;
       }
-    } else {
+    } else if (carouselName === 'logo') {
       if (this.currentLogoSlide < this.logos.length - 1) {
         this.currentLogoSlide++;
       } else {
         this.currentLogoSlide = 0;
       }
+    } else if (carouselName === 'prompt') {
+      if (this.currentLogoSlide < this.prompts.length - 1) {
+        this.currentPromptsSlide++;
+      } else {
+        this.currentPromptsSlide = 0;
+      }
     }
-
-
   }
+
   //TODO ovo nebi vako piso nikad :')
   previous(carouselName: string): void {
-    if(carouselName === 'sprite'){
+    if (carouselName === 'sprite') {
       if (this.currentSlide > 0) {
         this.currentSlide--;
       } else {
         this.currentSlide = this.sprites.length - 1;
       }
-    }else {
+    } else if (carouselName === 'logo') {
       if (this.currentLogoSlide > 0) {
         this.currentLogoSlide--;
       } else {
         this.currentLogoSlide = this.logos.length - 1;
       }
+    } else if (carouselName === 'prompt') {
+      if (this.currentPromptsSlide > 0) {
+        this.currentPromptsSlide--;
+      } else {
+        this.currentPromptsSlide = this.prompts.length - 1;
+      }
     }
-
   }
 
   @HostListener('window:keydown', ['$event'])
@@ -117,6 +140,7 @@ export class GeneratedSpritesComponent implements OnInit, OnDestroy {
       this.next('logo');
     } else if (event.key === 'ArrowLeft' || event.key === 'a' || event.key === 'A') {
       this.previous('sprite');
-      this.previous('logo');    }
+      this.previous('logo');
+    }
   }
 }

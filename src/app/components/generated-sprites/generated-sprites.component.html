@@ -32,5 +32,19 @@
         <span class="carousel-control-next-icon text-black" aria-hidden="true"></span>
       </div>
     </div>
+    <div id="promptsExampleControls" class="carousel slide" data-bs-ride="carousel">
+      <h2> Logos for app generated with ChatGpt4o</h2>
+      <div class="carousel-inner">
+        <div *ngFor="let prompt of prompts; let i = index" class="carousel-item" [class.active]="i === currentPromptsSlide">
+          <img [src]="prompt" class="d-block w-100" alt="Sprite Image">
+        </div>
+      </div>
+      <div class="carousel-control-prev" href="#carouselExampleControls" role="button" (click)="previous('prompt');">
+        <span class="carousel-control-prev-icon text-black" aria-hidden="true"></span>
+      </div>
+      <div class="carousel-control-next" href="#carouselExampleControls" role="button" (click)="next('prompt');">
+        <span class="carousel-control-next-icon text-black" aria-hidden="true"></span>
+      </div>
+    </div>
   </div>
 </div>

@@ -9,17 +9,14 @@ export class CharacterControls {
   orbitControl: OrbitControls;
   camera: Camera;
 
-  // state
   toggleRun: boolean = true;
   currentAction: string;
 
-  // temporary data
   walkDirection = new Vector3();
   rotateAngle = new Vector3(0, 1, 0);
   rotateQuaternion: Quaternion = new Quaternion();
   cameraTarget = new Vector3();
 
-  // constants
   fadeDuration: number = 0.2;
   runVelocity = 10;
   walkVelocity = 5;

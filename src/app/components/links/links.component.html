@@ -1,5 +1,5 @@
-<app-background-sky [fullHeight]="false" [textureId]="1"> <!-- or false based on your condition -->
-  <button (click)="scrollLeft()" class="nav-button left-button">&lt;</button>
+<app-background-sky [fullHeight]="true" [textureId]="1"> <!-- or false based on your condition -->
+  <button (click)="scrollLeft($event)" class="nav-button z-3 left-button">&lt;</button>
   <div class="content-wrapper" #contentWrapper>
     <div class="links-row d-flex">
       <div *ngFor="let linkCategory of links">
@@ -17,5 +17,5 @@
       </div>
     </div>
   </div>
-  <button (click)="scrollRight()" class="nav-button right-button">&gt;</button>
+  <button (click)="scrollRight($event)" class="nav-button z-3 right-button">&gt;</button>
 </app-background-sky>

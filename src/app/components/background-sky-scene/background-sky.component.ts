@@ -49,7 +49,6 @@ export class BackgroundSkyComponent implements OnInit {
 
   @HostListener('document:mousemove', ['$event'])
   onMouseMove(event: MouseEvent) {
-    console.log('MOuse X');
     this.mouseX = (event.clientX / window.innerWidth) * 2 - 1;
     this.mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
   }
@@ -108,14 +107,15 @@ export class BackgroundSkyComponent implements OnInit {
   }
 
   private addSkyTexture(): void {
-    const textureName = this.textureId !== 0 ? 'assets/textures/sky/rainy.hdr' : 'assets/textures/sky/sky.hdr';
+    const textures = [  'assets/textures/sky/sky.hdr' , 'assets/textures/sky/rainy.hdr', 'assets/textures/sky/sky_2.hdr' , 'assets/textures/sky/cloudy.hdr' ];
+
+    const textureName = textures[this.textureId];
     const loader = textureName.endsWith('.hdr') ? new RGBELoader(this.loadingManager) : new TextureLoader(this.loadingManager);
 
     loader.load(textureName, (texture) => {
       texture.mapping = EquirectangularReflectionMapping;
       this.scene.background = texture;
       this.scene.environment = texture; // Optional: to use the texture for environment lighting
-      console.log('Sky texture loaded successfully');
     }, undefined, (error) => {
       console.error('Error loading sky texture', error);
     });

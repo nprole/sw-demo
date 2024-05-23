@@ -1,38 +1,34 @@
-<div class="d-flex justify-content-center align-items-center">
-  <div class="card ">
-    <div class="card-header">
-      <h2>Welcome to Our Project</h2>
-    </div>
-    <div class="card-body">
-      <div class="logo"></div>
-      <p>Welcome to our project site! We're excited to showcase the innovative web application we've built, leveraging the capabilities of Angular, ChatGPT-4.0, and Three.js to provide a seamless and interactive experience for our users.</p>
-    </div>
-    <div class="content-section">
-      <h2>Technologies Used</h2>
-      <p>
-        <strong>Angular:</strong> A platform for building dynamic and scalable web applications for both mobile and desktop platforms. Learn more about Angular <a href="https://angular.io/docs" target="_blank">here</a>.
-      </p>
-      <p>
-        <strong>ChatGPT-4.0:</strong> An advanced conversational AI developed by OpenAI, capable of understanding and generating human-like text, powering our real-time chat interface. Explore ChatGPT-4.0 vs GPT-4 <a href="https://www.tomsguide.com/ai/chatgpt/i-gave-5-prompts-to-chatgpt-4o-vs-gpt-4-to-test-the-new-ai-model-heres-what-happened" target="_blank">here</a>.
-      </p>
-      <p>
-        <strong>Three.js:</strong> A JavaScript library used to create and display stunning 3D computer graphics and animations in web browsers, enriching our application with immersive visualizations. Discover Three.js examples <a href="https://threejs.org/examples/" target="_blank">here</a>.
-      </p>
-      <p>
-        <strong>Additional Technologies and Tools:</strong> Explore other technologies and tools used in our project:
-      <ul>
-        <li><a href="https://spline.design/" target="_blank">Spline</a></li>
-        <li><a href="https://www.blender.org/" target="_blank">Blender</a></li>
-        <li><a href="https://www.mapeditor.org/" target="_blank">Tiled</a></li>
-        <li><a href="https://phaser.io/" target="_blank">Phaser.js</a></li>
-        <li><a href="https://www.mixamo.com/#/?page=1&query=run" target="_blank">Mixmao</a></li>
-        <li><a href="https://www.w3.org/TR/webgpu/" target="_blank">WebGPU</a></li>
-        <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API" target="_blank">WebGL</a></li>
-        <li><a href="https://www.npmjs.com/package/cannon" target="_blank">canon.js</a></li>
-        <li><a href="https://ffmpeg.org/download.html" target="_blank">FFMPEG</a></li>
-        <li><a href="https://github.com/dataarts/dat.gui" target="_blank">dat.gui</a></li>
-      </ul>
-    </div>
+<app-background-sky class="position-absolute" [fullHeight]="true" [textureId]="2">
+  <div class=" position-absolute max-wrapper">
+    <ng-container class="content d-flex flex-column justify-content-center align-items-center">
+      <div class="flex-column justify-content-center align-items-center">
+        <div class="d-flex flex-column justify-content-center text-center"  routerLink="/scenes" >
+          <div class="logo-big align-self-center align-self-center justify-content-center  "></div>
+        </div>
+        <div>Welcome to our project site! We're excited to showcase the innovative web application we've built, leveraging
+          the capabilities of Angular, ChatGPT-4.0, and Three.js to provide a seamless and interactive experience for
+          our users.</div>
+
+        <div class="text-center p-3">Git Repository: <a href="https://github.com/nprole/sw-demo">Three.js demo</a></div>
+        <div class="text-center p-3">Author: <a href="https://github.com/nprole">Neven Prole</a></div>
+        <h2>Technologies Used</h2>
+        <div>
+          <strong>Angular:</strong> A platform for building dynamic and scalable web applications for both mobile and
+          desktop platforms. Learn more about Angular <a href="https://angular.io/docs" target="_blank">here</a>.
+        </div>
+        <div>
+          <strong>ChatGPT-4.0:</strong> An advanced conversational AI developed by OpenAI, capable of understanding and
+          generating human-like text, powering our real-time chat interface. Explore ChatGPT-4.0 vs GPT-4 <a
+          href="https://www.tomsguide.com/ai/chatgpt/i-gave-5-prompts-to-chatgpt-4o-vs-gpt-4-to-test-the-new-ai-model-heres-what-happened"
+          target="_blank">here</a>.
+        </div>
+        <div>
+          <strong>Three.js:</strong> A JavaScript library used to create and display stunning 3D computer graphics and
+          animations in web browsers, enriching our application with immersive visualizations. Discover Three.js
+          examples <a href="https://threejs.org/examples/" target="_blank">here</a>.
+        </div>
+      </div>
+    </ng-container>
   </div>
-</div>
+</app-background-sky>
 

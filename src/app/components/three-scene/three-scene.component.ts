@@ -37,7 +37,6 @@ export class ThreeSceneComponent implements AfterViewInit {
     // Create the renderer
     this.renderer = new WebGLRenderer();
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-    console.log('Sent Renderer' , this.rendererContainer.nativeElement);
     this.rendererContainer.nativeElement.appendChild(this.renderer.domElement);
 
     // Create a cube
